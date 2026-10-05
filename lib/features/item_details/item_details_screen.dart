@@ -36,7 +36,7 @@ class ItemDetailsScreen extends StatelessWidget {
               ],
             ),
             body: ListView(padding: const EdgeInsets.all(14), children: [
-              ItemPhoto(item, height: 170, emptyLabel: 'Item Photo (Optional)'),
+              ItemPhoto(item, height: 220, emptyLabel: 'Item Photo (Optional)', zoomable: true),
               const FieldLabel('Item name'),
               ReadOnlyField(item.name),
               const FieldLabel('Current status'),

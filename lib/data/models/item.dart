@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
@@ -16,6 +18,7 @@ class Item {
     required this.ownerId,
     this.tags = const [],
     this.hasPhoto = false,
+    this.photo,
     this.resolved = false,
     this.inquiries = 0,
     this.note,
@@ -30,7 +33,11 @@ class Item {
   DateTime date;
   String contact;
   List<String> tags;
+  /// Demo items set this without [photo] and show their [icon] instead.
   bool hasPhoto;
+
+  /// The picked image's bytes. Kept in memory, so it's gone after a restart.
+  Uint8List? photo;
   bool resolved;
   int inquiries;
   String? note;

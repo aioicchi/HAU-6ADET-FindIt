@@ -1,34 +1,59 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
 
-/// Upload placeholder. Toggles a simulated photo; wire up `image_picker` here later.
+/// Upload box. Shows a preview of [photo] when one is picked, the demo
+/// "attached" state when only [attached] is set, otherwise an upload prompt.
 class PhotoUploadBox extends StatelessWidget {
-  const PhotoUploadBox({super.key, required this.attached, required this.onTap});
+  const PhotoUploadBox({super.key, required this.photo, required this.attached, required this.onTap});
 
+  final Uint8List? photo;
   final bool attached;
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 120,
-          decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
-          child: Center(
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Icon(
-                attached ? Icons.check_circle : Icons.add_a_photo_outlined,
-                color: attached ? AppColors.found : AppColors.muted,
-                size: 28,
+  Widget build(BuildContext context) {
+    final photo = this.photo;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: photo != null ? 180 : 120,
+        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+        child: photo != null
+            ? Stack(fit: StackFit.expand, children: [
+                Image.memory(photo, fit: BoxFit.cover),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    color: Colors.black54,
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: const Text(
+                      'TAP TO CHANGE OR REMOVE',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ])
+            : Center(
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Icon(
+                    attached ? Icons.check_circle : Icons.add_a_photo_outlined,
+                    color: attached ? AppColors.found : AppColors.muted,
+                    size: 28,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    attached ? 'PHOTO ATTACHED (TAP TO CHANGE)' : 'TAP TO UPLOAD A PHOTO',
+                    style: const TextStyle(fontSize: 10, color: AppColors.muted),
+                  ),
+                ]),
               ),
-              const SizedBox(height: 6),
-              Text(
-                attached ? 'PHOTO ATTACHED (TAP TO REMOVE)' : 'CLICK TO UPLOAD SCHEMATIC',
-                style: const TextStyle(fontSize: 10, color: AppColors.muted),
-              ),
-            ]),
-          ),
-        ),
-      );
+      ),
+    );
+  }
 }

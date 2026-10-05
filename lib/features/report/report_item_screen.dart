@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:findit/core/theme/app_text_styles.dart';
 import 'package:findit/core/utils/date_format.dart';
@@ -29,6 +32,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   late ItemStatus? _status = widget.editing?.status;
   late DateTime _date = widget.editing?.date ?? DateTime.now();
   late bool _hasPhoto = widget.editing?.hasPhoto ?? false;
+  late Uint8List? _photo = widget.editing?.photo;
 
   bool get _isEdit => widget.editing != null;
 
@@ -45,6 +49,58 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     if (d != null) setState(() => _date = d);
   }
 
+  Future<void> _choosePhoto() async {
+    final hasAny = _photo != null || _hasPhoto;
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ListTile(
+            leading: const Icon(Icons.photo_library_outlined),
+            title: const Text('Choose from gallery'),
+            onTap: () => Navigator.pop(context, 'gallery'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo_camera_outlined),
+            title: const Text('Take a photo'),
+            onTap: () => Navigator.pop(context, 'camera'),
+          ),
+          if (hasAny)
+            ListTile(
+              leading: const Icon(Icons.delete_outline),
+              title: const Text('Remove photo'),
+              onTap: () => Navigator.pop(context, 'remove'),
+            ),
+        ]),
+      ),
+    );
+    if (choice == null) return;
+
+    if (choice == 'remove') {
+      setState(() {
+        _photo = null;
+        _hasPhoto = false;
+      });
+      return;
+    }
+
+    try {
+      final file = await ImagePicker().pickImage(
+        source: choice == 'camera' ? ImageSource.camera : ImageSource.gallery,
+        maxWidth: 1280,
+        imageQuality: 80,
+      );
+      if (file == null) return;
+      final bytes = await file.readAsBytes();
+      setState(() {
+        _photo = bytes;
+        _hasPhoto = true;
+      });
+    } catch (_) {
+      if (mounted) showSnack(context, 'Could not open the photo picker.');
+    }
+  }
+
   void _submit() {
     if (!_form.currentState!.validate()) return;
     final editing = widget.editing;
@@ -57,7 +113,8 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
         ..contact = _contact.text.trim()
         ..status = _status!
         ..date = _date
-        ..hasPhoto = _hasPhoto;
+        ..hasPhoto = _hasPhoto
+        ..photo = _photo;
       store.changed();
       Navigator.pop(context);
       showSnack(context, 'Report updated.');
@@ -74,6 +131,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
       contact: _contact.text.trim(),
       ownerId: store.user!.id,
       hasPhoto: _hasPhoto,
+      photo: _photo,
     ));
     _resetForm();
     showSnack(context, 'Item reported successfully.');
@@ -88,6 +146,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     setState(() {
       _status = null;
       _hasPhoto = false;
+      _photo = null;
       _date = DateTime.now();
     });
   }
@@ -135,7 +194,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
               ),
             ),
             const FieldLabel('Photo attachment'),
-            PhotoUploadBox(attached: _hasPhoto, onTap: () => setState(() => _hasPhoto = !_hasPhoto)),
+            PhotoUploadBox(photo: _photo, attached: _hasPhoto, onTap: _choosePhoto),
             const FieldLabel('Contact info'),
             TextFormField(controller: _contact, decoration: const InputDecoration(hintText: 'Email or Phone Number...'), validator: Validators.required),
             const Padding(
