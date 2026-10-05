@@ -18,16 +18,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _query = '';
-  ItemStatus? _filter;
+  String? _category;
+  HomeFilters _filters = const HomeFilters();
 
   List<Item> _visibleItems() {
     final q = _query.trim().toLowerCase();
-    return store.browseItems.where((i) {
-      if (_filter != null && i.status != _filter) return false;
+    return store.items.where((i) {
+      if (!_filters.matches(i)) return false;
+      if (_category != null && !i.tags.contains(_category)) return false;
       if (q.isEmpty) return true;
       return '${i.name} ${i.location} ${i.description} ${i.tags.join(' ')}'.toLowerCase().contains(q);
-    }).toList();
+    }).toList()
+      ..sort((a, b) => _filters.newestFirst ? b.date.compareTo(a.date) : a.date.compareTo(b.date));
   }
+
+  Widget _categoryChip(String label, String? value) => Padding(
+        padding: const EdgeInsets.only(right: 6),
+        child: ChoiceChip(
+          label: Text(label, style: const TextStyle(fontSize: 11)),
+          selected: _category == value,
+          visualDensity: VisualDensity.compact,
+          onSelected: (_) => setState(() => _category = value),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -36,6 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
           listenable: store,
           builder: (context, _) {
             final items = _visibleItems();
+            final locations = {for (final i in store.items) i.location}.toList()..sort();
+            final filtering = _query.isNotEmpty || _category != null || _filters.activeCount > 0;
+
             return ListView(padding: const EdgeInsets.all(12), children: [
               const Text('SEARCH ITEMS...', style: AppTextStyles.label),
               const SizedBox(height: 6),
@@ -43,14 +59,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 onChanged: (v) => setState(() => _query = v),
                 decoration: const InputDecoration(hintText: 'e.g. Blue Backpack, Keys...', prefixIcon: Icon(Icons.search, size: 18)),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(children: [
+                  _categoryChip('All', null),
+                  for (final c in Item.categories) _categoryChip(c[0] + c.substring(1).toLowerCase(), c),
+                ]),
+              ),
+              const SizedBox(height: 12),
               Row(children: [
                 const Expanded(child: Text('Lost & Found Items', style: AppTextStyles.sectionTitle)),
-                FilterButton(value: _filter, onChanged: (v) => setState(() => _filter = v)),
+                FilterButton(value: _filters, locations: locations, onChanged: (v) => setState(() => _filters = v)),
               ]),
+              const SizedBox(height: 4),
+              Text('${items.length} item${items.length == 1 ? '' : 's'}', style: AppTextStyles.caption),
               const SizedBox(height: 10),
               if (items.isEmpty)
-                const EmptyState('No items match your search.', icon: Icons.search_off)
+                EmptyState(filtering ? 'No items match your search or filters.' : 'No items reported yet.', icon: Icons.search_off)
               else
                 for (final item in items)
                   ItemCard(item, onDetails: () => pushPage(context, ItemDetailsScreen(itemId: item.id))),

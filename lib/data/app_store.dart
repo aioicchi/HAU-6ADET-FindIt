@@ -57,8 +57,6 @@ class AppStore extends ChangeNotifier {
     return null;
   }
 
-  List<Item> get browseItems => items.where((i) => !i.resolved).toList()..sort((a, b) => b.date.compareTo(a.date));
-
   List<Item> get myItems => items.where((i) => i.ownerId == user?.id).toList();
 
   void addItem(Item item) {

@@ -27,7 +27,7 @@ _Screenshots coming soon._
 
 ## What it does
 
-- **Browse and search** every open lost and found report on campus, and filter by Lost or Found.
+- **Browse and search** every lost and found report on campus, and filter by category, Lost or Found, and location, sort by date, or include resolved items.
 - **Report an item** with a name, category, description, location, date and a photo taken with the camera or picked from the gallery.
 - **View item details**, with a full-screen photo you can zoom, then **message the owner or finder** to arrange a return. Contact details stay private.
 - **Manage your own reports** in My Items: edit, mark as resolved, reopen, delete, and see how many inquiries each one got.
@@ -79,7 +79,8 @@ This app needs no API keys, so there is no `.env` to set up.
 
 ## Status and what is next
 
-**Works:** login and register, browse/search/filter, report and edit items with
+**Works:** login and register, browse/search with category, status, location,
+sort and resolved filters, report and edit items with
 photos and categories, item details with a zoomable photo, chat, My Items
 (resolve, reopen, delete), notifications, edit profile.
 
@@ -90,8 +91,7 @@ photos and categories, item details with a zoomable photo, chat, My Items
 - The "possible match" notification is part of the demo data, not computed.
 
 **Next:** save data with Firebase or Supabase, a "claim this item" flow where the
-finder verifies the claimer, automatic matching between lost and found reports,
-and filters by category and location.
+finder verifies the claimer, and automatic matching between lost and found reports.
 
 ## Credits
 
