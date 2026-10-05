@@ -29,6 +29,7 @@ class Item {
     this.inquiries = 0,
     this.note,
     this.claimAt,
+    this.verifyQuestion,
   });
 
   factory Item.fromJson(Map<String, dynamic> j) {
@@ -50,6 +51,7 @@ class Item {
       inquiries: j['inquiries'] as int? ?? 0,
       note: j['note'] as String?,
       claimAt: j['claimAt'] as String?,
+      verifyQuestion: j['verifyQuestion'] as String?,
     );
   }
 
@@ -76,6 +78,17 @@ class Item {
 
   /// Found items only: where the owner can pick it up, e.g. "Security Office".
   String? claimAt;
+
+  /// Found items only: what the finder asks claimers, to check the item is theirs.
+  String? verifyQuestion;
+
+  static const defaultVerifyQuestion =
+      'Describe something only the owner would know: a mark, a sticker, a name, or what was inside.';
+
+  String get claimQuestion {
+    final q = verifyQuestion;
+    return q == null || q.trim().isEmpty ? defaultVerifyQuestion : q;
+  }
 
   /// The category picked on the report form, if any.
   String? get category => tags.where(categories.contains).firstOrNull;
@@ -109,6 +122,7 @@ class Item {
       'inquiries': inquiries,
       'note': note,
       'claimAt': claimAt,
+      'verifyQuestion': verifyQuestion,
     };
   }
 

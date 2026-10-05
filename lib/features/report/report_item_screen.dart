@@ -30,6 +30,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   late final _location = TextEditingController(text: widget.editing?.location);
   late final _contact = TextEditingController(text: widget.editing?.contact ?? store.user?.email);
   late final _claimAt = TextEditingController(text: widget.editing?.claimAt);
+  late final _verifyQuestion = TextEditingController(text: widget.editing?.verifyQuestion);
   late ItemStatus? _status = widget.editing?.status;
   late String? _category = widget.editing?.category;
   late DateTime _date = widget.editing?.date ?? DateTime.now();
@@ -49,7 +50,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
 
   @override
   void dispose() {
-    for (final c in [_name, _description, _location, _contact, _claimAt]) {
+    for (final c in [_name, _description, _location, _contact, _claimAt, _verifyQuestion]) {
       c.dispose();
     }
     super.dispose();
@@ -118,9 +119,9 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   List<String> _tags(List<String> existing) =>
       [_category!, ...existing.where((t) => !Item.categories.contains(t))];
 
-  /// Only found items have a claim location.
-  String? get _claimAtValue {
-    final v = _claimAt.text.trim();
+  /// Only found items have a claim location and a verification question.
+  String? _foundOnly(TextEditingController c) {
+    final v = c.text.trim();
     return _status == ItemStatus.found && v.isNotEmpty ? v : null;
   }
 
@@ -131,7 +132,8 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     if (editing != null) {
       editing
         ..tags = _tags(editing.tags)
-        ..claimAt = _claimAtValue
+        ..claimAt = _foundOnly(_claimAt)
+        ..verifyQuestion = _foundOnly(_verifyQuestion)
         ..name = _name.text.trim()
         ..description = _description.text.trim()
         ..location = _location.text.trim()
@@ -157,7 +159,8 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
       contact: _contact.text.trim(),
       ownerId: store.user!.id,
       tags: _tags(const []),
-      claimAt: _claimAtValue,
+      claimAt: _foundOnly(_claimAt),
+      verifyQuestion: _foundOnly(_verifyQuestion),
       hasPhoto: _hasPhoto,
       photo: _photo,
     ));
@@ -172,6 +175,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     _description.clear();
     _location.clear();
     _claimAt.clear();
+    _verifyQuestion.clear();
     setState(() {
       _status = null;
       _category = null;
@@ -234,6 +238,21 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
                 decoration: const InputDecoration(
                   hintText: 'e.g. Security Office, PGN Hall',
                   prefixIcon: Icon(Icons.storefront_outlined, size: 18),
+                ),
+              ),
+              const FieldLabel('Question for claimers (optional)'),
+              TextFormField(
+                controller: _verifyQuestion,
+                decoration: const InputDecoration(
+                  hintText: "e.g. What's written on the bottom?",
+                  prefixIcon: Icon(Icons.help_outline, size: 18),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: Text(
+                  'Ask something only the real owner would know. Leave it out of the description.',
+                  style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
                 ),
               ),
             ],

@@ -4,7 +4,8 @@ import 'package:findit/core/theme/app_colors.dart';
 import 'package:findit/core/theme/app_text_styles.dart';
 import 'package:findit/core/utils/date_format.dart';
 import 'package:findit/data/app_store.dart';
-import 'package:findit/data/models/item.dart';
+import 'package:findit/data/models/models.dart';
+import 'package:findit/features/claim/widgets/claim_requests.dart';
 import 'package:findit/features/report/report_item_screen.dart';
 import 'package:findit/shared/shared.dart';
 
@@ -27,6 +28,7 @@ class ItemDetailsScreen extends StatelessWidget {
           final isMine = item.ownerId == store.user?.id;
           final claimAt = item.claimAt;
           final matches = isMine && !item.resolved ? store.matchesFor(item) : const <Item>[];
+          final claims = isMine && !item.isLost ? store.claimsFor(item.id) : const <Claim>[];
 
           return Scaffold(
             appBar: AppBar(
@@ -70,6 +72,10 @@ class ItemDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 for (final m in matches) _MatchTile(m),
+              ],
+              if (claims.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                ClaimRequests(item: item, claims: claims),
               ],
               const SizedBox(height: 20),
               isMine ? OwnerActions(item) : VisitorActions(item),

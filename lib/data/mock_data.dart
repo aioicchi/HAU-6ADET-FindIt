@@ -49,6 +49,7 @@ class MockData {
         inquiries: 1,
         note: 'Currently at lost and found section',
         claimAt: 'Lost & Found Office, SJH Ground Floor',
+        verifyQuestion: "What color is it, and what's special about the lid?",
       ),
       Item(
         id: '3',
@@ -63,6 +64,7 @@ class MockData {
         hasPhoto: true,
         photoAsset: 'assets/images/student_id_found.jpg',
         claimAt: 'University Library front desk',
+        verifyQuestion: 'What name is printed on the card?',
       ),
       Item(
         id: '4',
@@ -77,6 +79,7 @@ class MockData {
         hasPhoto: true,
         photoAsset: 'assets/images/umbrella.jpg',
         claimAt: 'Security Office, PGN Hall',
+        verifyQuestion: 'What color is it, and is there any design on it?',
       ),
       Item(
         id: '5',
@@ -123,10 +126,23 @@ class MockData {
     };
   }
 
+  /// A claim waiting for the demo user to approve or reject.
+  static List<Claim> claims() => [
+        Claim(
+          id: 'c1',
+          itemId: '2',
+          claimant: 'Mark T.',
+          answer: "It's moss green with a black spout lid. I also lost the box with it.",
+          time: DateTime.now().subtract(const Duration(hours: 4)),
+          fromMe: false,
+        ),
+      ];
+
   static List<AppNotification> notifications() {
     final now = DateTime.now();
     return [
       AppNotification(title: 'Possible match', body: 'A found item may match your lost Student ID.', time: now.subtract(const Duration(hours: 1)), itemId: '3'),
+      AppNotification(title: 'New claim', body: 'Mark T. says your found Aquaflask Tumbler is theirs. Review the claim.', time: now.subtract(const Duration(hours: 4)), itemId: '2'),
       AppNotification(title: 'New inquiry', body: 'Someone inquired about your Aquaflask Tumbler.', time: now.subtract(const Duration(hours: 5)), itemId: '2'),
       AppNotification(title: 'Welcome to FindIt', body: 'Report lost or found items across campus.', time: now.subtract(const Duration(days: 2))),
     ];

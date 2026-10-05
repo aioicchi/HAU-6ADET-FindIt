@@ -94,4 +94,42 @@ void main() {
     expect(reopened.user, isNull);
     expect(reopened.findItem('1'), isNotNull);
   });
+
+  group('claims', () {
+    test('a detailed answer is approved', () async {
+      final s = AppStore();
+      s.login(MockData.demoEmail, MockData.demoPassword);
+      final umbrella = s.findItem('4')!;
+
+      s.submitClaim(umbrella, "It's red with white flowers painted on it.");
+      expect(s.myClaimFor('4')!.isPending, isTrue);
+
+      await Future<void>.delayed(const Duration(milliseconds: 3200));
+      expect(s.myClaimFor('4')!.status, ClaimStatus.approved);
+      expect(s.notifications.first.title, 'Claim approved');
+      expect(s.notifications.first.body, contains('Security Office, PGN Hall'));
+    });
+
+    test('naming the item alone is not enough', () async {
+      final s = AppStore();
+      s.login(MockData.demoEmail, MockData.demoPassword);
+
+      s.submitClaim(s.findItem('3')!, 'It is my student ID card, I lost it.');
+      await Future<void>.delayed(const Duration(milliseconds: 3200));
+      expect(s.myClaimFor('3')!.status, ClaimStatus.rejected);
+      expect(s.notifications.first.title, 'Claim not approved');
+    });
+
+    test('approving resolves the item and declines the rest', () {
+      final s = AppStore();
+      s.login(MockData.demoEmail, MockData.demoPassword);
+      final other = Claim(id: 'c2', itemId: '2', claimant: 'Someone', answer: 'blue', time: DateTime.now(), fromMe: false);
+      s.claims.add(other);
+
+      s.approveClaim(s.claimsFor('2').firstWhere((c) => c.id == 'c1'));
+      expect(s.findItem('2')!.resolved, isTrue);
+      expect(other.status, ClaimStatus.rejected);
+      expect(s.pendingClaimsFor('2'), 0);
+    });
+  });
 }

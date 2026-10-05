@@ -10,7 +10,7 @@ import 'models/models.dart';
 /// change. Swap the internals for an API/Firebase later without touching the screens.
 class AppStore extends ChangeNotifier {
   // Bump when the demo data changes shape, so old saves don't hide new demo content.
-  static const _storageKey = 'findit_data_v2';
+  static const _storageKey = 'findit_data_v3';
 
   AppUser? user;
 
@@ -19,6 +19,7 @@ class AppStore extends ChangeNotifier {
   final List<Item> items = MockData.items();
   final List<AppNotification> notifications = MockData.notifications();
   final Map<String, List<Message>> _threads = MockData.threads();
+  final List<Claim> claims = MockData.claims();
 
   /// Threads waiting for a simulated reply, so only one is queued at a time.
   final Set<String> _pendingReplies = {};
@@ -43,6 +44,10 @@ class AppStore extends ChangeNotifier {
       final raw = prefs.getString(_storageKey);
       if (raw == null) return; // First run: keep the demo data.
       _fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      // A claim sent just before the page closed still gets its answer.
+      for (final c in claims.where((c) => c.fromMe && c.isPending)) {
+        _queueDecision(c);
+      }
     } catch (e) {
       debugPrint('FindIt: could not load saved data, starting fresh. $e');
     }
@@ -65,6 +70,9 @@ class AppStore extends ChangeNotifier {
     _threads
       ..clear()
       ..addAll(MockData.threads());
+    claims
+      ..clear()
+      ..addAll(MockData.claims());
     _pendingReplies.clear();
     user = null;
     super.notifyListeners();
@@ -101,6 +109,7 @@ class AppStore extends ChangeNotifier {
         'threads': {
           for (final e in _threads.entries) e.key: [for (final m in e.value) m.toJson()],
         },
+        'claims': [for (final c in claims) c.toJson()],
       };
 
   void _fromJson(Map<String, dynamic> j) {
@@ -124,6 +133,9 @@ class AppStore extends ChangeNotifier {
         for (final e in (j['threads'] as Map<String, dynamic>).entries)
           e.key: List<Map<String, dynamic>>.from(e.value as List).map(Message.fromJson).toList(),
       });
+    claims
+      ..clear()
+      ..addAll(list('claims').map(Claim.fromJson));
     final session = j['session'] as String?;
     user = _accounts.where((a) => a.email == session).firstOrNull;
   }
@@ -212,6 +224,7 @@ class AppStore extends ChangeNotifier {
   void deleteItem(String id) {
     items.removeWhere((i) => i.id == id);
     _threads.remove(id);
+    claims.removeWhere((c) => c.itemId == id);
     notifyListeners();
   }
 
@@ -261,6 +274,85 @@ class AppStore extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  // ---- Claims ----
+
+  /// All claims on [itemId], newest first.
+  List<Claim> claimsFor(String itemId) =>
+      claims.where((c) => c.itemId == itemId).toList()..sort((a, b) => b.time.compareTo(a.time));
+
+  /// The signed-in user's latest claim on [itemId], if any.
+  Claim? myClaimFor(String itemId) => claimsFor(itemId).where((c) => c.fromMe).firstOrNull;
+
+  int pendingClaimsFor(String itemId) => claims.where((c) => c.itemId == itemId && c.isPending).length;
+
+  /// Claim someone else's found item. The (simulated) finder decides a moment later.
+  void submitClaim(Item item, String answer) {
+    final claim = Claim(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      itemId: item.id,
+      claimant: user!.name,
+      answer: answer.trim(),
+      time: DateTime.now(),
+      fromMe: true,
+    );
+    claims.add(claim);
+    notifyListeners();
+    _queueDecision(claim);
+  }
+
+  /// The finder approves: the item is handed over, so it's resolved and any other waiting claims are rejected.
+  void approveClaim(Claim claim) {
+    claim.status = ClaimStatus.approved;
+    for (final other in claims.where((c) => c.itemId == claim.itemId && c.isPending)) {
+      other.status = ClaimStatus.rejected;
+    }
+    findItem(claim.itemId)?.resolved = true;
+    notifyListeners();
+  }
+
+  void rejectClaim(Claim claim) {
+    claim.status = ClaimStatus.rejected;
+    notifyListeners();
+  }
+
+  /// Demo only: the finder approves when the answer mentions at least two
+  /// details from the description (not just the item's name), like a real
+  /// finder comparing notes.
+  void _queueDecision(Claim claim) {
+    Future.delayed(const Duration(seconds: 3), () {
+      final item = findItem(claim.itemId);
+      if (item == null || !claim.isPending || !claims.contains(claim)) return;
+
+      final known = _detailWords(item.description).difference(_detailWords('${item.name} ${item.tags.join(' ')}'));
+      final ok = _detailWords(claim.answer).intersection(known).length >= 2;
+
+      claim.status = ok ? ClaimStatus.approved : ClaimStatus.rejected;
+      notifications.insert(
+        0,
+        AppNotification(
+          title: ok ? 'Claim approved' : 'Claim not approved',
+          body: ok
+              ? 'Your ${item.name} is ready. Pick it up at ${item.claimAt ?? item.location} and bring your school ID.'
+              : "The finder couldn't confirm the ${item.name} is yours. Try again with more detail.",
+          time: DateTime.now(),
+          itemId: item.id,
+        ),
+      );
+      notifyListeners();
+    });
+  }
+
+  static const _commonWords = {
+    'the', 'and', 'with', 'that', 'this', 'its', 'has', 'have', 'there', 'from', 'was', 'were', 'are',
+    'for', 'mine', 'item', 'left', 'found', 'lost', 'one', 'some', 'very', 'like', 'just', 'any',
+  };
+
+  static Set<String> _detailWords(String text) => text
+      .toLowerCase()
+      .split(RegExp('[^a-z0-9]+'))
+      .where((w) => w.length >= 3 && !_commonWords.contains(w))
+      .toSet();
 
   // ---- Notifications ----
   int get unreadCount => notifications.where((n) => !n.read).length;

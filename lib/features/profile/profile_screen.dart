@@ -99,9 +99,11 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(height: 6),
             Text('2. Found something? Report it as FOUND and drop it at the Lost & Found office.'),
             SizedBox(height: 6),
-            Text('3. Browse items and use Contact to message the finder/owner.'),
+            Text('3. See your item in the list? Tap Claim This Item and answer the finder\'s question to prove it\'s yours.'),
             SizedBox(height: 6),
-            Text('4. Once returned, mark your report as Resolved.'),
+            Text('4. Found something and got a claim? Review the answer, then Approve or Reject it.'),
+            SizedBox(height: 6),
+            Text('5. Use Contact to message the finder/owner, and mark your report as Resolved once it\'s returned.'),
           ]),
         ),
       );

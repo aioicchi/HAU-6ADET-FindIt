@@ -4,7 +4,7 @@ import 'package:findit/core/theme/app_colors.dart';
 import 'package:findit/core/theme/app_text_styles.dart';
 import 'package:findit/core/utils/date_format.dart';
 import 'package:findit/data/app_store.dart';
-import 'package:findit/data/models/item.dart';
+import 'package:findit/data/models/models.dart';
 import 'package:findit/features/item_details/item_details_screen.dart';
 import 'package:findit/features/report/report_item_screen.dart';
 import 'package:findit/shared/shared.dart';
@@ -15,10 +15,15 @@ class MyItemCard extends StatelessWidget {
   final Item item;
 
   String? get _statusLine {
-    if (item.resolved) return 'Resolved';
+    if (item.resolved) {
+      final approved = store.claimsFor(item.id).where((c) => c.status == ClaimStatus.approved).firstOrNull;
+      return approved == null ? 'Resolved' : 'Claimed by ${approved.claimant}';
+    }
     final n = item.inquiries;
     final m = store.matchesFor(item).length;
+    final c = store.pendingClaimsFor(item.id);
     final parts = [
+      if (c > 0) '$c ${c == 1 ? 'claim' : 'claims'} to review',
       if (n > 0) '$n ${n == 1 ? 'inquiry' : 'inquiries'}',
       if (m > 0) '$m possible ${m == 1 ? 'match' : 'matches'}',
     ];
