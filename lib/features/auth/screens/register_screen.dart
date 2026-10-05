@@ -60,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormField(controller: _password, obscureText: true, validator: Validators.password),
               const FieldLabel('Confirm password'),
               TextFormField(obscureText: true, validator: (v) => v != _password.text ? 'Passwords do not match' : null),
-              if (_error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(_error!, style: AppTextStyles.error)),
+              if (_error != null) Padding(padding: EdgeInsets.only(top: 8), child: Text(_error!, style: AppTextStyles.error)),
               const SizedBox(height: 20),
               FilledButton(onPressed: _submit, child: const Text('Register')),
             ]),

@@ -37,7 +37,7 @@ class ClaimStatusCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: color, width: 1.5)),
+      decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: color, width: 1.5)),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Icon(icon, color: color),
         const SizedBox(width: 10),
@@ -47,8 +47,8 @@ class ClaimStatusCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(body, style: const TextStyle(fontSize: 12)),
             const SizedBox(height: 6),
-            Text('Your answer: "${claim.answer}"', style: const TextStyle(fontSize: 11, color: AppColors.muted, fontStyle: FontStyle.italic)),
-            Text('Sent ${timeAgo(claim.time).toLowerCase()}', style: const TextStyle(fontSize: 10, color: AppColors.hint)),
+            Text('Your answer: "${claim.answer}"', style: TextStyle(fontSize: 11, color: AppColors.muted, fontStyle: FontStyle.italic)),
+            Text('Sent ${timeAgo(claim.time).toLowerCase()}', style: TextStyle(fontSize: 10, color: AppColors.hint)),
           ]),
         ),
       ]),

@@ -43,7 +43,7 @@ class _ClaimScreenState extends State<ClaimScreen> {
         child: ListView(padding: const EdgeInsets.all(14), children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+            decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
             child: Row(children: [
               SizedBox(width: 56, child: ItemPhoto(item, height: 56)),
               const SizedBox(width: 10),
@@ -57,9 +57,9 @@ class _ClaimScreenState extends State<ClaimScreen> {
             ]),
           ),
           const SizedBox(height: 16),
-          const Text('VERIFY OWNERSHIP', style: AppTextStyles.label),
+          Text('VERIFY OWNERSHIP', style: AppTextStyles.label),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             "To make sure the item goes back to the right person, answer the finder's question. "
             'Be specific: details only the owner would know work best.',
             style: AppTextStyles.caption,
@@ -70,7 +70,7 @@ class _ClaimScreenState extends State<ClaimScreen> {
             padding: const EdgeInsets.all(12),
             color: AppColors.banner,
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Icon(Icons.help_outline, size: 18, color: AppColors.navy),
+              Icon(Icons.help_outline, size: 18, color: AppColors.navy),
               const SizedBox(width: 8),
               Expanded(child: Text(item.claimQuestion, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600))),
             ]),

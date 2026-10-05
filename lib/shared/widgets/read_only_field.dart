@@ -14,9 +14,9 @@ class ReadOnlyField extends StatelessWidget {
         width: double.infinity,
         constraints: BoxConstraints(minHeight: minHeight),
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+        decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (icon != null) ...[Icon(icon, size: 16, color: AppColors.muted), const SizedBox(width: 8)],
+          if (icon != null) ...[Icon(icon, size: 16, color: AppColors.muted), SizedBox(width: 8)],
           Expanded(child: Text(text, style: const TextStyle(fontSize: 13))),
         ]),
       );

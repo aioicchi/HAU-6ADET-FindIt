@@ -18,7 +18,7 @@ class PhotoUploadBox extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: photo != null ? 180 : 120,
-        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+        decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
         child: photo != null
             ? Stack(fit: StackFit.expand, children: [
                 Image(image: photo, fit: BoxFit.cover),
@@ -47,7 +47,7 @@ class PhotoUploadBox extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     attached ? 'PHOTO ATTACHED (TAP TO CHANGE)' : 'TAP TO UPLOAD A PHOTO',
-                    style: const TextStyle(fontSize: 10, color: AppColors.muted),
+                    style: TextStyle(fontSize: 10, color: AppColors.muted),
                   ),
                 ]),
               ),

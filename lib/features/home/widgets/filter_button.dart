@@ -46,7 +46,7 @@ class FilterButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: n > 0 ? AppColors.navy : Colors.white,
+          color: n > 0 ? AppColors.navy : AppColors.surface,
           border: Border.all(color: n > 0 ? AppColors.navy : AppColors.line),
         ),
         child: Row(children: [
@@ -98,7 +98,7 @@ class _FilterSheetState extends State<_FilterSheet> {
               ),
             ]),
             const SizedBox(height: 8),
-            const Text('STATUS', style: AppTextStyles.label),
+            Text('STATUS', style: AppTextStyles.label),
             const SizedBox(height: 6),
             Wrap(spacing: 8, children: [
               _choice('All', _status == null, () => setState(() => _status = null)),
@@ -106,7 +106,7 @@ class _FilterSheetState extends State<_FilterSheet> {
               _choice('Found', _status == ItemStatus.found, () => setState(() => _status = ItemStatus.found)),
             ]),
             const SizedBox(height: 14),
-            const Text('LOCATION', style: AppTextStyles.label),
+            Text('LOCATION', style: AppTextStyles.label),
             const SizedBox(height: 6),
             DropdownButtonFormField<String?>(
               initialValue: _location,
@@ -119,7 +119,7 @@ class _FilterSheetState extends State<_FilterSheet> {
               onChanged: (v) => setState(() => _location = v),
             ),
             const SizedBox(height: 14),
-            const Text('SORT BY DATE', style: AppTextStyles.label),
+            Text('SORT BY DATE', style: AppTextStyles.label),
             const SizedBox(height: 6),
             Wrap(spacing: 8, children: [
               _choice('Newest first', _newestFirst, () => setState(() => _newestFirst = true)),

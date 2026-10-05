@@ -37,7 +37,7 @@ class MyItemCard extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(0, 28),
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          side: const BorderSide(color: AppColors.line),
+          side: BorderSide(color: AppColors.line),
           textStyle: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
         ),
       );
@@ -46,7 +46,7 @@ class MyItemCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+        decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             StatusTag(item),

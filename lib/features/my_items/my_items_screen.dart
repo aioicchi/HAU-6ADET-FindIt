@@ -40,7 +40,7 @@ class _MyItemsScreenState extends State<MyItemsScreen> {
                   child: Text('${active.length} ACTIVE', style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w700)),
                 ),
               ]),
-              const Text('Track status, edits, and resolved items', style: AppTextStyles.caption),
+              Text('Track status, edits, and resolved items', style: AppTextStyles.caption),
               const SizedBox(height: 12),
               PostsTabBar(
                 activeCount: active.length,

@@ -10,7 +10,7 @@ class ChipTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(color: const Color(0xFFE5E7EB), border: Border.all(color: AppColors.line)),
+        decoration: BoxDecoration(color: Color(0xFFE5E7EB), border: Border.all(color: AppColors.line)),
         child: Text(text, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: .5)),
       );
 }

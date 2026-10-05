@@ -34,6 +34,7 @@ _Screenshots coming soon._
 - **Automatic matching:** when you report an item, FindIt looks for reports on the other side (lost vs found) with the same category or a similar name, notifies you, and lists them under "Possible matches".
 - **Manage your own reports** in My Items: edit, mark as resolved, reopen, delete, and see how many people asked about each one.
 - **Notifications** for possible matches and new replies, plus a profile you can edit.
+- **Night mode:** tap the moon on the Home screen, or pick System / Light / Dark under Profile > Appearance. The choice is remembered.
 
 ## Built with
 
@@ -88,7 +89,7 @@ This app needs no API keys, so there is no `.env` to set up.
 sort and resolved filters, report and edit items with
 photos, categories and claim locations, item details with a zoomable photo,
 automatic lost/found matching, claiming with a verification question and
-approve/reject, chat with simulated replies, My Items
+approve/reject, chat with simulated replies, night mode, My Items
 (resolve, reopen, delete), notifications, edit profile. Everything is saved on
 the device and survives a page reload; Profile > Reset Demo Data starts over.
 

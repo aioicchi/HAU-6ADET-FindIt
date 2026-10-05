@@ -31,7 +31,7 @@ class PostsTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+        decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
         child: Row(children: [
           _tab('MY POSTS ($activeCount)', !showResolved, () => onChanged(false)),
           _tab('RESOLVED ($resolvedCount)', showResolved, () => onChanged(true)),

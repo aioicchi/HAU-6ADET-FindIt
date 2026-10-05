@@ -36,13 +36,13 @@ class ClaimRequests extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+            decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(child: Text(c.claimant, style: const TextStyle(fontWeight: FontWeight.w700))),
                 _StatusChip(c.status),
               ]),
-              Text(timeAgo(c.time), style: const TextStyle(fontSize: 10, color: AppColors.hint)),
+              Text(timeAgo(c.time), style: TextStyle(fontSize: 10, color: AppColors.hint)),
               const SizedBox(height: 6),
               Text('"${c.answer}"', style: const TextStyle(fontSize: 13)),
               if (c.isPending) ...[

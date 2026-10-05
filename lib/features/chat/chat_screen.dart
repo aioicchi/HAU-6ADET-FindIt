@@ -36,7 +36,7 @@ class ChatScreen extends StatelessWidget {
                   isMine
                       ? 'Ask for identifying details before handing the item over. Your contact info stays hidden.'
                       : "The reporter's contact info is private. Describe identifying details to verify ownership.",
-                  style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                  style: TextStyle(fontSize: 11, color: AppColors.muted),
                 ),
               ),
               Expanded(

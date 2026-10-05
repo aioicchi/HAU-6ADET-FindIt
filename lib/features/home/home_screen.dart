@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             final filtering = _query.isNotEmpty || _category != null || _filters.activeCount > 0;
 
             return ListView(padding: const EdgeInsets.all(12), children: [
-              const Text('SEARCH ITEMS...', style: AppTextStyles.label),
+              Text('SEARCH ITEMS...', style: AppTextStyles.label),
               const SizedBox(height: 6),
               TextField(
                 onChanged: (v) => setState(() => _query = v),

@@ -21,20 +21,20 @@ class MessageBubble extends StatelessWidget {
           if (!mine && sender != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 2),
-              child: Text(sender, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.muted)),
+              child: Text(sender, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             constraints: const BoxConstraints(maxWidth: 280),
             decoration: BoxDecoration(
-              color: mine ? AppColors.navy : Colors.white,
+              color: mine ? AppColors.navy : AppColors.surface,
               border: Border.all(color: AppColors.line),
             ),
-            child: Text(message.text, style: TextStyle(color: mine ? Colors.white : Colors.black87, fontSize: 13)),
+            child: Text(message.text, style: TextStyle(color: mine ? Colors.white : AppColors.text, fontSize: 13)),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 2, bottom: 10),
-            child: Text(timeAgo(message.time), style: const TextStyle(fontSize: 9, color: AppColors.hint)),
+            child: Text(timeAgo(message.time), style: TextStyle(fontSize: 9, color: AppColors.hint)),
           ),
         ],
       ),

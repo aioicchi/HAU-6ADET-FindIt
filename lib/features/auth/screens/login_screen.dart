@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          if (_error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(_error!, style: AppTextStyles.error)),
+          if (_error != null) Padding(padding: EdgeInsets.only(top: 8), child: Text(_error!, style: AppTextStyles.error)),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(

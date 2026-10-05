@@ -43,14 +43,14 @@ class ItemPhoto extends StatelessWidget {
       height: height,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: item.hasPhoto ? AppColors.photoBg : Colors.white,
+        color: item.hasPhoto ? AppColors.photoBg : AppColors.surface,
         border: Border.all(color: AppColors.line),
       ),
       child: Center(
         child: item.hasPhoto
             ? Icon(item.icon, size: height * .45, color: AppColors.navy.withValues(alpha: .6))
             : height < 80
-                ? const Icon(Icons.image_outlined, color: AppColors.hint)
+                ? Icon(Icons.image_outlined, color: AppColors.hint)
                 : Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(color: AppColors.background, border: Border.all(color: AppColors.line)),

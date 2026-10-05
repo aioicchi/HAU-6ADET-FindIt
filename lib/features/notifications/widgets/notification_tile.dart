@@ -14,7 +14,7 @@ class NotificationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final n = notification;
     return ListTile(
-      tileColor: n.read ? null : Colors.white,
+      tileColor: n.read ? null : AppColors.surface,
       leading: Icon(n.read ? Icons.notifications_none : Icons.notifications_active, color: AppColors.navy),
       title: Text(n.title, style: TextStyle(fontWeight: n.read ? FontWeight.w500 : FontWeight.w700, fontSize: 14)),
       subtitle: Text('${n.body}\n${timeAgo(n.time)}', style: const TextStyle(fontSize: 12)),

@@ -13,7 +13,7 @@ class StatusTag extends StatelessWidget {
     final color = item.resolved ? AppColors.muted : item.statusColor;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: color)),
+      decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: color)),
       child: Text(
         item.resolved ? '[RESOLVED]' : '[${item.statusLabel}]',
         style: TextStyle(fontFamily: 'monospace', fontSize: 10, fontWeight: FontWeight.w700, color: color),

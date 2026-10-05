@@ -5,35 +5,47 @@ import 'app_colors.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get light {
+  /// The theme for whichever palette [AppColors] is currently using.
+  static ThemeData get current {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(2),
-      borderSide: const BorderSide(color: AppColors.line),
+      borderSide: BorderSide(color: AppColors.line),
     );
     final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(2));
+    final brightness = AppColors.dark ? Brightness.dark : Brightness.light;
 
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.navy, primary: AppColors.navy),
+      brightness: brightness,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF1E2A45),
+        brightness: brightness,
+        primary: AppColors.navy,
+        onPrimary: Colors.white,
+        surface: AppColors.surface,
+        onSurface: AppColors.text,
+        error: AppColors.lost,
+      ),
       scaffoldBackgroundColor: AppColors.background,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
+      dividerColor: AppColors.line,
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.surface,
         foregroundColor: AppColors.navy,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: TextStyle(color: AppColors.navy, fontSize: 16, fontWeight: FontWeight.w700),
+        titleTextStyle: TextStyle(color: AppColors.dark ? AppColors.text : AppColors.navy, fontSize: 16, fontWeight: FontWeight.w700),
         shape: Border(bottom: BorderSide(color: AppColors.line)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.surface,
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         border: border,
         enabledBorder: border,
-        focusedBorder: border.copyWith(borderSide: const BorderSide(color: AppColors.navy, width: 1.5)),
-        hintStyle: const TextStyle(color: AppColors.hint, fontSize: 13),
+        focusedBorder: border.copyWith(borderSide: BorderSide(color: AppColors.navy, width: 1.5)),
+        hintStyle: TextStyle(color: AppColors.hint, fontSize: 13),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
@@ -48,10 +60,13 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.navy,
           minimumSize: const Size.fromHeight(48),
-          side: const BorderSide(color: AppColors.navy),
+          side: BorderSide(color: AppColors.navy),
           shape: shape,
         ),
       ),
+      bottomSheetTheme: BottomSheetThemeData(backgroundColor: AppColors.surface),
+      dialogTheme: DialogThemeData(backgroundColor: AppColors.surface),
+      navigationBarTheme: NavigationBarThemeData(backgroundColor: AppColors.surface),
     );
   }
 }

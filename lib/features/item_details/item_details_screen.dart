@@ -97,19 +97,19 @@ class _MatchTile extends StatelessWidget {
           onTap: () => pushPage(context, ItemDetailsScreen(itemId: item.id)),
           child: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+            decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
             child: Row(children: [
               SizedBox(width: 52, child: ItemPhoto(item, height: 52)),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(item.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                  Text(item.location, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
-                  Text(item.whenLabel, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(item.location, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(item.whenLabel, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                 ]),
               ),
               StatusTag(item),
-              const Icon(Icons.chevron_right, color: AppColors.hint),
+              Icon(Icons.chevron_right, color: AppColors.hint),
             ]),
           ),
         ),

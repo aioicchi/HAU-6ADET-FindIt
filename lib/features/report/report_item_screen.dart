@@ -195,9 +195,9 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
         body: Form(
           key: _form,
           child: ListView(padding: const EdgeInsets.all(14), children: [
-            const Text('INFORMATION ENTRY', style: AppTextStyles.label),
+            Text('INFORMATION ENTRY', style: AppTextStyles.label),
             const SizedBox(height: 4),
-            const Text('Fill out the details below to register the item in the university database.', style: AppTextStyles.caption),
+            Text('Fill out the details below to register the item in the university database.', style: AppTextStyles.caption),
             const Divider(height: 24),
             const FieldLabel('Item name'),
             TextFormField(controller: _name, decoration: const InputDecoration(hintText: 'Enter short title...'), validator: Validators.required),

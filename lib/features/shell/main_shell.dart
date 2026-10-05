@@ -27,7 +27,7 @@ class _MainShellState extends State<MainShell> {
         ]),
         bottomNavigationBar: NavigationBar(
           selectedIndex: _index,
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.surface,
           indicatorColor: AppColors.navy,
           height: 62,
           onDestinationSelected: _goTo,
