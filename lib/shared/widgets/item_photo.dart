@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:findit/core/theme/app_colors.dart';
 import 'package:findit/data/models/item.dart';
 
-/// Shows the item's real photo if one was uploaded, its icon when a demo
-/// photo is "attached", otherwise an empty wireframe box.
+/// Shows the item's real photo (uploaded or bundled) if it has one, its icon
+/// when a placeholder photo is "attached", otherwise an empty wireframe box.
 ///
 /// With [zoomable], tapping a real photo opens it full screen.
 class ItemPhoto extends StatelessWidget {
@@ -17,13 +17,13 @@ class ItemPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photo = item.photo;
+    final photo = item.photoImage;
     if (photo != null) {
       final image = Container(
         height: height,
         width: double.infinity,
         decoration: BoxDecoration(color: AppColors.photoBg, border: Border.all(color: AppColors.line)),
-        child: Image.memory(photo, fit: BoxFit.cover, gaplessPlayback: true),
+        child: Image(image: photo, fit: BoxFit.cover, gaplessPlayback: true),
       );
       if (!zoomable) return image;
       return GestureDetector(
@@ -77,7 +77,7 @@ class PhotoViewer extends StatelessWidget {
         ),
         body: InteractiveViewer(
           maxScale: 5,
-          child: Center(child: Image.memory(item.photo!)),
+          child: Center(child: Image(image: item.photoImage!)),
         ),
       );
 }

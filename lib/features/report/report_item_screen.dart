@@ -33,8 +33,17 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   late DateTime _date = widget.editing?.date ?? DateTime.now();
   late bool _hasPhoto = widget.editing?.hasPhoto ?? false;
   late Uint8List? _photo = widget.editing?.photo;
+  late String? _photoAsset = widget.editing?.photoAsset;
 
   bool get _isEdit => widget.editing != null;
+
+  ImageProvider? get _preview {
+    final bytes = _photo;
+    if (bytes != null) return MemoryImage(bytes);
+    final asset = _photoAsset;
+    if (asset != null) return AssetImage(asset);
+    return null;
+  }
 
   @override
   void dispose() {
@@ -50,7 +59,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   }
 
   Future<void> _choosePhoto() async {
-    final hasAny = _photo != null || _hasPhoto;
+    final hasAny = _preview != null || _hasPhoto;
     final choice = await showModalBottomSheet<String>(
       context: context,
       builder: (context) => SafeArea(
@@ -79,6 +88,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     if (choice == 'remove') {
       setState(() {
         _photo = null;
+        _photoAsset = null;
         _hasPhoto = false;
       });
       return;
@@ -94,6 +104,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
       final bytes = await file.readAsBytes();
       setState(() {
         _photo = bytes;
+        _photoAsset = null;
         _hasPhoto = true;
       });
     } catch (_) {
@@ -114,7 +125,8 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
         ..status = _status!
         ..date = _date
         ..hasPhoto = _hasPhoto
-        ..photo = _photo;
+        ..photo = _photo
+        ..photoAsset = _photoAsset;
       store.changed();
       Navigator.pop(context);
       showSnack(context, 'Report updated.');
@@ -194,7 +206,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
               ),
             ),
             const FieldLabel('Photo attachment'),
-            PhotoUploadBox(photo: _photo, attached: _hasPhoto, onTap: _choosePhoto),
+            PhotoUploadBox(photo: _preview, attached: _hasPhoto, onTap: _choosePhoto),
             const FieldLabel('Contact info'),
             TextFormField(controller: _contact, decoration: const InputDecoration(hintText: 'Email or Phone Number...'), validator: Validators.required),
             const Padding(

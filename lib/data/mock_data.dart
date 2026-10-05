@@ -21,7 +21,7 @@ class MockData {
       Item(
         id: '1',
         name: 'Student ID',
-        description: 'Holy Angel University student ID card, blue with a red lanyard.',
+        description: 'Blue student ID card with a photo and barcode. School year 2024/2025.',
         status: ItemStatus.lost,
         location: 'IH-GYM (Gymnasium)',
         date: now.subtract(const Duration(hours: 2)),
@@ -29,13 +29,14 @@ class MockData {
         ownerId: 'u1',
         tags: ['ID CARD', 'DOCUMENTS'],
         hasPhoto: true,
+        photoAsset: 'assets/images/student_id.jpg',
         inquiries: 2,
         note: 'Pending claim inquiries',
       ),
       Item(
         id: '2',
         name: 'Aquaflask Tumbler',
-        description: 'Navy blue 40oz Aquaflask with a small dent near the bottom.',
+        description: 'Moss green 32oz Aquaflask with a black spout lid and carry loop. Found with its box.',
         status: ItemStatus.found,
         location: 'SJH (St. Joseph Hall)',
         date: now.subtract(const Duration(days: 1)),
@@ -43,6 +44,7 @@ class MockData {
         ownerId: 'u1',
         tags: ['TUMBLER'],
         hasPhoto: true,
+        photoAsset: 'assets/images/tumbler.jpg',
         note: 'Currently at lost and found section',
       ),
       Item(
@@ -59,7 +61,7 @@ class MockData {
       Item(
         id: '4',
         name: 'Umbrella',
-        description: 'Compact black folding umbrella left on a bench.',
+        description: 'Red paper umbrella with white flowers painted on it, left on a bench.',
         status: ItemStatus.found,
         location: 'PGN (Pangilinan Hall)',
         date: now.subtract(const Duration(days: 2)),
@@ -67,17 +69,20 @@ class MockData {
         ownerId: 'u2',
         tags: ['UMBRELLA'],
         hasPhoto: true,
+        photoAsset: 'assets/images/umbrella.jpg',
       ),
       Item(
         id: '5',
         name: 'House Keys',
-        description: 'Set of 3 keys with a green keychain.',
+        description: 'Loose set of brass and silver house keys. Two have round paper tags labelled "Carport".',
         status: ItemStatus.lost,
         location: 'Canteen',
         date: now.subtract(const Duration(days: 3)),
         contact: '0918 555 0102',
         ownerId: 'u3',
         tags: ['KEYS'],
+        hasPhoto: true,
+        photoAsset: 'assets/images/keys.jpg',
       ),
     ];
   }

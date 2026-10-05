@@ -19,6 +19,7 @@ class Item {
     this.tags = const [],
     this.hasPhoto = false,
     this.photo,
+    this.photoAsset,
     this.resolved = false,
     this.inquiries = 0,
     this.note,
@@ -33,14 +34,26 @@ class Item {
   DateTime date;
   String contact;
   List<String> tags;
-  /// Demo items set this without [photo] and show their [icon] instead.
+  /// Set without [photo] or [photoAsset] to show the item's [icon] instead.
   bool hasPhoto;
 
   /// The picked image's bytes. Kept in memory, so it's gone after a restart.
   Uint8List? photo;
+
+  /// A bundled image under assets/images/, used by the demo items.
+  String? photoAsset;
   bool resolved;
   int inquiries;
   String? note;
+
+  /// The real photo to show, if there is one. An uploaded photo wins over a bundled one.
+  ImageProvider? get photoImage {
+    final bytes = photo;
+    if (bytes != null) return MemoryImage(bytes);
+    final asset = photoAsset;
+    if (asset != null) return AssetImage(asset);
+    return null;
+  }
 
   bool get isLost => status == ItemStatus.lost;
   String get statusLabel => isLost ? 'LOST' : 'FOUND';

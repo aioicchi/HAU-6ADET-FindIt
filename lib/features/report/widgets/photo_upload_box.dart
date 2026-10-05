@@ -1,15 +1,13 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
 
-/// Upload box. Shows a preview of [photo] when one is picked, the demo
+/// Upload box. Shows a preview of [photo] when there is one, the placeholder
 /// "attached" state when only [attached] is set, otherwise an upload prompt.
 class PhotoUploadBox extends StatelessWidget {
   const PhotoUploadBox({super.key, required this.photo, required this.attached, required this.onTap});
 
-  final Uint8List? photo;
+  final ImageProvider? photo;
   final bool attached;
   final VoidCallback onTap;
 
@@ -23,7 +21,7 @@ class PhotoUploadBox extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
         child: photo != null
             ? Stack(fit: StackFit.expand, children: [
-                Image.memory(photo, fit: BoxFit.cover),
+                Image(image: photo, fit: BoxFit.cover),
                 Positioned(
                   left: 0,
                   right: 0,
