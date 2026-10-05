@@ -33,14 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ..sort((a, b) => _filters.newestFirst ? b.date.compareTo(a.date) : a.date.compareTo(b.date));
   }
 
-  Widget _categoryChip(String label, String? value) => Padding(
-        padding: const EdgeInsets.only(right: 6),
-        child: ChoiceChip(
-          label: Text(label, style: const TextStyle(fontSize: 11)),
-          selected: _category == value,
-          visualDensity: VisualDensity.compact,
-          onSelected: (_) => setState(() => _category = value),
-        ),
+  Widget _categoryChip(String label, String? value) => ChoiceChip(
+        label: Text(label, style: const TextStyle(fontSize: 11)),
+        selected: _category == value,
+        materialTapTargetSize: MaterialTapTargetSize.padded, // At least 48 px to tap.
+        onSelected: (_) => setState(() => _category = value),
       );
 
   @override
@@ -71,13 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: const InputDecoration(hintText: 'e.g. Blue Backpack, Keys...', prefixIcon: Icon(Icons.search, size: 18)),
                   ),
                   const SizedBox(height: 10),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(children: [
-                      _categoryChip('All', null),
-                      for (final c in Item.categories) _categoryChip(Item.categoryLabel(c), c),
-                    ]),
-                  ),
+                  // Wraps onto more lines instead of scrolling sideways, so no chip is cut off at the edge.
+                  // No run spacing: each chip's 48 px tap area already leaves a gap between rows.
+                  Wrap(spacing: 6, children: [
+                    _categoryChip('All', null),
+                    for (final c in Item.categories) _categoryChip(Item.categoryLabel(c), c),
+                  ]),
                   const SizedBox(height: 12),
                   Row(children: [
                     const Expanded(child: Text('Lost & Found Items', style: AppTextStyles.sectionTitle)),
