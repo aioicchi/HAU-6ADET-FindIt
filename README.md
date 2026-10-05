@@ -39,8 +39,8 @@ _Screenshots coming soon._
 | --- | --- |
 | Framework | Flutter (Dart) |
 | State | One `ChangeNotifier` store (`lib/data/app_store.dart`) read with `ListenableBuilder` |
-| Storage | In memory only, seeded with demo data from `lib/data/mock_data.dart` (see Status) |
-| Other packages | `image_picker` for camera and gallery photos |
+| Storage | `shared_preferences` (browser storage on the web), seeded with demo data from `lib/data/mock_data.dart` |
+| Other packages | `image_picker` for camera and gallery photos, `shared_preferences` to save data on the device |
 
 ## Running it yourself
 
@@ -59,8 +59,11 @@ This app needs no API keys, so there is no `.env` to set up.
 
 ## Privacy and secrets
 
-- FindIt has no backend: accounts, reports, photos and messages stay in the
-  browser's memory and are gone when the page reloads. Nothing is sent to a server.
+- FindIt has no backend: accounts, reports, photos and messages are saved only
+  in your own browser (or on your device), and nothing is sent to a server.
+  Profile > Reset Demo Data deletes it all.
+- Because this is a demo, passwords are saved in browser storage as plain text.
+  Don't use a real password when you register.
 - There are no secrets or API keys in this project.
 - All sample data is fictional (demo user "Juan Dela Cruz", made-up IDs and
   phone numbers), and the one real-looking face in the sample photos is pixelated.
@@ -82,15 +85,18 @@ This app needs no API keys, so there is no `.env` to set up.
 **Works:** login and register, browse/search with category, status, location,
 sort and resolved filters, report and edit items with
 photos and categories, item details with a zoomable photo, chat, My Items
-(resolve, reopen, delete), notifications, edit profile.
+(resolve, reopen, delete), notifications, edit profile. Everything is saved on
+the device and survives a page reload; Profile > Reset Demo Data starts over.
 
 **Known issues:**
-- Data is not saved: everything resets when the page reloads.
+- Data is saved per browser, not shared: other users can't see your reports.
+- Browser storage holds about 5 MB. If many photos don't fit, the reports are
+  still saved but those photos disappear on reload.
 - Chat is one-way; no one replies yet, and every message counts as a new inquiry.
 - "Forgot password" only shows a confirmation; no email is sent.
 - The "possible match" notification is part of the demo data, not computed.
 
-**Next:** save data with Firebase or Supabase, a "claim this item" flow where the
+**Next:** a shared online database so all users see the same reports, a "claim this item" flow where the
 finder verifies the claimer, and automatic matching between lost and found reports.
 
 ## Credits

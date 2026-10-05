@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -28,6 +29,27 @@ class Item {
     this.note,
   });
 
+  factory Item.fromJson(Map<String, dynamic> j) {
+    final photo = j['photo'] as String?;
+    return Item(
+      id: j['id'] as String,
+      name: j['name'] as String,
+      description: j['description'] as String,
+      status: ItemStatus.values.byName(j['status'] as String),
+      location: j['location'] as String,
+      date: DateTime.parse(j['date'] as String),
+      contact: j['contact'] as String,
+      ownerId: j['ownerId'] as String,
+      tags: List<String>.from(j['tags'] as List? ?? const []),
+      hasPhoto: j['hasPhoto'] as bool? ?? false,
+      photo: photo == null ? null : base64Decode(photo),
+      photoAsset: j['photoAsset'] as String?,
+      resolved: j['resolved'] as bool? ?? false,
+      inquiries: j['inquiries'] as int? ?? 0,
+      note: j['note'] as String?,
+    );
+  }
+
   final String id;
   final String ownerId;
   String name;
@@ -40,7 +62,7 @@ class Item {
   /// Set without [photo] or [photoAsset] to show the item's [icon] instead.
   bool hasPhoto;
 
-  /// The picked image's bytes. Kept in memory, so it's gone after a restart.
+  /// The picked image's bytes. Saved with the item as base64.
   Uint8List? photo;
 
   /// A bundled image under assets/images/, used by the demo items.
@@ -56,6 +78,28 @@ class Item {
     final asset = photoAsset;
     if (asset != null) return AssetImage(asset);
     return null;
+  }
+
+  /// With [withPhoto] false the uploaded photo is left out, to save space.
+  Map<String, dynamic> toJson({bool withPhoto = true}) {
+    final bytes = photo;
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'status': status.name,
+      'location': location,
+      'date': date.toIso8601String(),
+      'contact': contact,
+      'ownerId': ownerId,
+      'tags': tags,
+      'hasPhoto': hasPhoto,
+      'photo': withPhoto && bytes != null ? base64Encode(bytes) : null,
+      'photoAsset': photoAsset,
+      'resolved': resolved,
+      'inquiries': inquiries,
+      'note': note,
+    };
   }
 
   bool get isLost => status == ItemStatus.lost;

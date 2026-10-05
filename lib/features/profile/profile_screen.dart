@@ -17,6 +17,18 @@ class ProfileScreen extends StatelessWidget {
     store.logout();
   }
 
+  Future<void> _resetData(BuildContext context) async {
+    final ok = await confirmDialog(
+      context,
+      title: 'Reset demo data?',
+      message: 'This deletes every account, report, photo and message saved on this device, then restores the demo data. You will be signed out.',
+      confirm: 'Reset',
+    );
+    if (!ok || !context.mounted) return;
+    Navigator.popUntil(context, (r) => r.isFirst);
+    await store.resetDemoData();
+  }
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
         listenable: store,
@@ -63,6 +75,7 @@ class ProfileScreen extends StatelessWidget {
               const FieldLabel('Support'),
               _Tile(Icons.help_outline, 'How FindIt Works', () => _showHelp(context)),
               _Tile(Icons.info_outline, 'About', () => showAboutDialog(context: context, applicationName: 'FindIt', applicationVersion: '1.0.0')),
+              _Tile(Icons.restart_alt, 'Reset Demo Data', () => _resetData(context)),
               const SizedBox(height: 20),
               OutlinedButton.icon(
                 style: OutlinedButton.styleFrom(foregroundColor: AppColors.lost, side: const BorderSide(color: AppColors.lost)),
