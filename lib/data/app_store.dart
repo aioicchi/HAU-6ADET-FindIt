@@ -9,7 +9,8 @@ import 'models/models.dart';
 /// App state, saved on this device (browser storage on the web) after every
 /// change. Swap the internals for an API/Firebase later without touching the screens.
 class AppStore extends ChangeNotifier {
-  static const _storageKey = 'findit_data_v1';
+  // Bump when the demo data changes shape, so old saves don't hide new demo content.
+  static const _storageKey = 'findit_data_v2';
 
   AppUser? user;
 
@@ -17,7 +18,10 @@ class AppStore extends ChangeNotifier {
   final Map<String, String> _passwords = {MockData.demoEmail: MockData.demoPassword};
   final List<Item> items = MockData.items();
   final List<AppNotification> notifications = MockData.notifications();
-  final Map<String, List<Message>> _threads = {};
+  final Map<String, List<Message>> _threads = MockData.threads();
+
+  /// Threads waiting for a simulated reply, so only one is queued at a time.
+  final Set<String> _pendingReplies = {};
 
   SharedPreferences? _prefs;
   Future<void> _lastSave = Future.value();
@@ -58,7 +62,10 @@ class AppStore extends ChangeNotifier {
     notifications
       ..clear()
       ..addAll(MockData.notifications());
-    _threads.clear();
+    _threads
+      ..clear()
+      ..addAll(MockData.threads());
+    _pendingReplies.clear();
     user = null;
     super.notifyListeners();
     await _lastSave;
@@ -166,8 +173,41 @@ class AppStore extends ChangeNotifier {
 
   void addItem(Item item) {
     items.insert(0, item);
+    // Tell the reporter right away if someone already reported the other side.
+    final best = matchesFor(item).firstOrNull;
+    if (best != null) {
+      notifications.insert(
+        0,
+        AppNotification(
+          title: 'Possible match',
+          body: 'A ${best.statusLabel.toLowerCase()} ${best.name} at ${best.location} may match '
+              'your ${item.statusLabel.toLowerCase()} ${item.name}.',
+          time: DateTime.now(),
+          itemId: best.id,
+        ),
+      );
+    }
     notifyListeners();
   }
+
+  /// Open reports on the other side (lost vs found) that look like [item]:
+  /// the same category scores 2, each shared word in the name scores 1.
+  /// Anything scoring 2 or more counts, best first.
+  List<Item> matchesFor(Item item) {
+    final words = _nameWords(item.name);
+    final scored = <(Item, int)>[];
+    for (final other in items) {
+      if (other.id == item.id || other.status == item.status || other.resolved) continue;
+      var score = _nameWords(other.name).intersection(words).length;
+      if (item.category != null && item.category == other.category) score += 2;
+      if (score >= 2) scored.add((other, score));
+    }
+    scored.sort((a, b) => b.$2 != a.$2 ? b.$2.compareTo(a.$2) : b.$1.date.compareTo(a.$1.date));
+    return [for (final s in scored) s.$1];
+  }
+
+  static Set<String> _nameWords(String name) =>
+      name.toLowerCase().split(RegExp('[^a-z0-9]+')).where((w) => w.length >= 3).toSet();
 
   void deleteItem(String id) {
     items.removeWhere((i) => i.id == id);
@@ -184,9 +224,42 @@ class AppStore extends ChangeNotifier {
   List<Message> thread(String itemId) => _threads.putIfAbsent(itemId, () => []);
 
   void sendMessage(Item item, String text) {
-    thread(item.id).add(Message(text: text, fromMe: true, time: DateTime.now()));
-    item.inquiries++;
+    final t = thread(item.id);
+    final isMine = item.ownerId == user?.id;
+    // Inquiries count people, not messages: only your first message on someone else's report adds one.
+    if (!isMine && !t.any((m) => m.fromMe)) item.inquiries++;
+    t.add(Message(text: text, fromMe: true, time: DateTime.now()));
     notifyListeners();
+    if (!isMine) _queueReply(item);
+  }
+
+  /// Demo only: the reporter answers a moment later, following a short script.
+  void _queueReply(Item item) {
+    final replies = item.isLost
+        ? [
+            'Hi! Thanks for messaging. Did you find my ${item.name}? Where is it now?',
+            "That sounds like mine! Can we meet at ${item.location}? I'm free after class.",
+          ]
+        : [
+            "Hi! Thanks for reaching out. To make sure it's yours, can you describe something only "
+                "the owner would know, like a mark, a sticker, or what's inside?",
+            'That matches what I found. You can claim it at ${item.claimAt ?? item.location}. '
+                'Please bring your school ID.',
+          ];
+    final sent = thread(item.id).where((m) => !m.fromMe).length;
+    if (sent >= replies.length || !_pendingReplies.add(item.id)) return;
+
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      _pendingReplies.remove(item.id);
+      if (findItem(item.id) == null) return; // Deleted meanwhile.
+      final text = replies[sent];
+      thread(item.id).add(Message(text: text, fromMe: false, time: DateTime.now(), sender: item.isLost ? 'Owner' : 'Finder'));
+      notifications.insert(
+        0,
+        AppNotification(title: 'New reply', body: '${item.name}: "$text"', time: DateTime.now(), itemId: item.id),
+      );
+      notifyListeners();
+    });
   }
 
   // ---- Notifications ----

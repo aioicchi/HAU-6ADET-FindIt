@@ -29,8 +29,9 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   late final _description = TextEditingController(text: widget.editing?.description);
   late final _location = TextEditingController(text: widget.editing?.location);
   late final _contact = TextEditingController(text: widget.editing?.contact ?? store.user?.email);
+  late final _claimAt = TextEditingController(text: widget.editing?.claimAt);
   late ItemStatus? _status = widget.editing?.status;
-  late String? _category = widget.editing?.tags.where(Item.categories.contains).firstOrNull;
+  late String? _category = widget.editing?.category;
   late DateTime _date = widget.editing?.date ?? DateTime.now();
   late bool _hasPhoto = widget.editing?.hasPhoto ?? false;
   late Uint8List? _photo = widget.editing?.photo;
@@ -48,7 +49,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
 
   @override
   void dispose() {
-    for (final c in [_name, _description, _location, _contact]) {
+    for (final c in [_name, _description, _location, _contact, _claimAt]) {
       c.dispose();
     }
     super.dispose();
@@ -117,6 +118,12 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   List<String> _tags(List<String> existing) =>
       [_category!, ...existing.where((t) => !Item.categories.contains(t))];
 
+  /// Only found items have a claim location.
+  String? get _claimAtValue {
+    final v = _claimAt.text.trim();
+    return _status == ItemStatus.found && v.isNotEmpty ? v : null;
+  }
+
   void _submit() {
     if (!_form.currentState!.validate()) return;
     final editing = widget.editing;
@@ -124,6 +131,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     if (editing != null) {
       editing
         ..tags = _tags(editing.tags)
+        ..claimAt = _claimAtValue
         ..name = _name.text.trim()
         ..description = _description.text.trim()
         ..location = _location.text.trim()
@@ -149,6 +157,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
       contact: _contact.text.trim(),
       ownerId: store.user!.id,
       tags: _tags(const []),
+      claimAt: _claimAtValue,
       hasPhoto: _hasPhoto,
       photo: _photo,
     ));
@@ -162,6 +171,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     _name.clear();
     _description.clear();
     _location.clear();
+    _claimAt.clear();
     setState(() {
       _status = null;
       _category = null;
@@ -217,6 +227,16 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
               decoration: const InputDecoration(hintText: 'Building, Room, or Area...', prefixIcon: Icon(Icons.place_outlined, size: 18)),
               validator: Validators.required,
             ),
+            if (_status == ItemStatus.found) ...[
+              const FieldLabel('Where can the owner claim it? (optional)'),
+              TextFormField(
+                controller: _claimAt,
+                decoration: const InputDecoration(
+                  hintText: 'e.g. Security Office, PGN Hall',
+                  prefixIcon: Icon(Icons.storefront_outlined, size: 18),
+                ),
+              ),
+            ],
             const FieldLabel('Date'),
             InkWell(
               onTap: _pickDate,

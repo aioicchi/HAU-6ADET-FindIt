@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
+import 'package:findit/core/utils/date_format.dart';
 import 'package:findit/data/models/message.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -9,17 +10,34 @@ class MessageBubble extends StatelessWidget {
   final Message message;
 
   @override
-  Widget build(BuildContext context) => Align(
-        alignment: message.fromMe ? Alignment.centerRight : Alignment.centerLeft,
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          constraints: const BoxConstraints(maxWidth: 280),
-          decoration: BoxDecoration(
-            color: message.fromMe ? AppColors.navy : Colors.white,
-            border: Border.all(color: AppColors.line),
+  Widget build(BuildContext context) {
+    final mine = message.fromMe;
+    final sender = message.sender;
+    return Align(
+      alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: mine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          if (!mine && sender != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: Text(sender, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.muted)),
+            ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            constraints: const BoxConstraints(maxWidth: 280),
+            decoration: BoxDecoration(
+              color: mine ? AppColors.navy : Colors.white,
+              border: Border.all(color: AppColors.line),
+            ),
+            child: Text(message.text, style: TextStyle(color: mine ? Colors.white : Colors.black87, fontSize: 13)),
           ),
-          child: Text(message.text, style: TextStyle(color: message.fromMe ? Colors.white : Colors.black87, fontSize: 13)),
-        ),
-      );
+          Padding(
+            padding: const EdgeInsets.only(top: 2, bottom: 10),
+            child: Text(timeAgo(message.time), style: const TextStyle(fontSize: 9, color: AppColors.hint)),
+          ),
+        ],
+      ),
+    );
+  }
 }

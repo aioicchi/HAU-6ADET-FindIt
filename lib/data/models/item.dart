@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
+import 'package:findit/core/utils/date_format.dart';
 
 enum ItemStatus { lost, found }
 
@@ -27,6 +28,7 @@ class Item {
     this.resolved = false,
     this.inquiries = 0,
     this.note,
+    this.claimAt,
   });
 
   factory Item.fromJson(Map<String, dynamic> j) {
@@ -47,6 +49,7 @@ class Item {
       resolved: j['resolved'] as bool? ?? false,
       inquiries: j['inquiries'] as int? ?? 0,
       note: j['note'] as String?,
+      claimAt: j['claimAt'] as String?,
     );
   }
 
@@ -70,6 +73,12 @@ class Item {
   bool resolved;
   int inquiries;
   String? note;
+
+  /// Found items only: where the owner can pick it up, e.g. "Security Office".
+  String? claimAt;
+
+  /// The category picked on the report form, if any.
+  String? get category => tags.where(categories.contains).firstOrNull;
 
   /// The real photo to show, if there is one. An uploaded photo wins over a bundled one.
   ImageProvider? get photoImage {
@@ -99,11 +108,18 @@ class Item {
       'resolved': resolved,
       'inquiries': inquiries,
       'note': note,
+      'claimAt': claimAt,
     };
   }
 
   bool get isLost => status == ItemStatus.lost;
   String get statusLabel => isLost ? 'LOST' : 'FOUND';
+
+  /// "Lost 2 hours ago", "Found yesterday", "Found on January 30, 2026".
+  String get whenLabel {
+    final verb = isLost ? 'Lost' : 'Found';
+    return isOlderThanAWeek(date) ? '$verb on ${fullDate(date)}' : '$verb ${timeAgo(date).toLowerCase()}';
+  }
   Color get statusColor => isLost ? AppColors.lost : AppColors.found;
 
   /// Icon used as a photo placeholder, picked from the item's name and tags.

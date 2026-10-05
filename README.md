@@ -29,9 +29,10 @@ _Screenshots coming soon._
 
 - **Browse and search** every lost and found report on campus, and filter by category, Lost or Found, and location, sort by date, or include resolved items.
 - **Report an item** with a name, category, description, location, date and a photo taken with the camera or picked from the gallery.
-- **View item details**, with a full-screen photo you can zoom, then **message the owner or finder** to arrange a return. Contact details stay private.
-- **Manage your own reports** in My Items: edit, mark as resolved, reopen, delete, and see how many inquiries each one got.
-- **Notifications** for possible matches and new inquiries, plus a profile you can edit.
+- **View item details**, with a full-screen photo you can zoom and, for found items, where to claim it. Then **message the owner or finder** to arrange a return. Contact details stay private.
+- **Automatic matching:** when you report an item, FindIt looks for reports on the other side (lost vs found) with the same category or a similar name, notifies you, and lists them under "Possible matches".
+- **Manage your own reports** in My Items: edit, mark as resolved, reopen, delete, and see how many people asked about each one.
+- **Notifications** for possible matches and new replies, plus a profile you can edit.
 
 ## Built with
 
@@ -84,7 +85,8 @@ This app needs no API keys, so there is no `.env` to set up.
 
 **Works:** login and register, browse/search with category, status, location,
 sort and resolved filters, report and edit items with
-photos and categories, item details with a zoomable photo, chat, My Items
+photos, categories and claim locations, item details with a zoomable photo,
+automatic lost/found matching, chat with simulated replies, My Items
 (resolve, reopen, delete), notifications, edit profile. Everything is saved on
 the device and survives a page reload; Profile > Reset Demo Data starts over.
 
@@ -92,12 +94,12 @@ the device and survives a page reload; Profile > Reset Demo Data starts over.
 - Data is saved per browser, not shared: other users can't see your reports.
 - Browser storage holds about 5 MB. If many photos don't fit, the reports are
   still saved but those photos disappear on reload.
-- Chat is one-way; no one replies yet, and every message counts as a new inquiry.
+- Chat replies are simulated: the other person answers from a short script,
+  because there is no shared server for real users to talk through.
 - "Forgot password" only shows a confirmation; no email is sent.
-- The "possible match" notification is part of the demo data, not computed.
 
 **Next:** a shared online database so all users see the same reports, a "claim this item" flow where the
-finder verifies the claimer, and automatic matching between lost and found reports.
+finder approves or rejects the claimer, and real-time chat between users.
 
 ## Credits
 

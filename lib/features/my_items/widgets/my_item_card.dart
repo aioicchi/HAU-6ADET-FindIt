@@ -16,8 +16,13 @@ class MyItemCard extends StatelessWidget {
 
   String? get _statusLine {
     if (item.resolved) return 'Resolved';
-    if (item.isLost && item.inquiries > 0) return 'Pending claim inquiries (${item.inquiries})';
-    return item.note;
+    final n = item.inquiries;
+    final m = store.matchesFor(item).length;
+    final parts = [
+      if (n > 0) '$n ${n == 1 ? 'inquiry' : 'inquiries'}',
+      if (m > 0) '$m possible ${m == 1 ? 'match' : 'matches'}',
+    ];
+    return parts.isEmpty ? item.note : parts.join(' · ');
   }
 
   Widget _smallButton(IconData icon, String label, VoidCallback onTap) => OutlinedButton.icon(

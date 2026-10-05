@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
-import 'package:findit/core/utils/date_format.dart';
 import 'package:findit/data/models/item.dart';
 
 import 'item_photo.dart';
@@ -30,7 +29,7 @@ class ItemCard extends StatelessWidget {
           Text(item.location, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
           const SizedBox(height: 8),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(timeAgo(item.date), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+            Text(item.whenLabel, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
             OutlinedButton(
               onPressed: onDetails,
               style: OutlinedButton.styleFrom(

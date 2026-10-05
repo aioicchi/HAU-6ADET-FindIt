@@ -46,7 +46,9 @@ class MockData {
         tags: ['TUMBLER'],
         hasPhoto: true,
         photoAsset: 'assets/images/tumbler.jpg',
+        inquiries: 1,
         note: 'Currently at lost and found section',
+        claimAt: 'Lost & Found Office, SJH Ground Floor',
       ),
       Item(
         id: '3',
@@ -60,6 +62,7 @@ class MockData {
         tags: ['ID CARD', 'DOCUMENTS'],
         hasPhoto: true,
         photoAsset: 'assets/images/student_id_found.jpg',
+        claimAt: 'University Library front desk',
       ),
       Item(
         id: '4',
@@ -73,6 +76,7 @@ class MockData {
         tags: ['UMBRELLA'],
         hasPhoto: true,
         photoAsset: 'assets/images/umbrella.jpg',
+        claimAt: 'Security Office, PGN Hall',
       ),
       Item(
         id: '5',
@@ -88,6 +92,35 @@ class MockData {
         photoAsset: 'assets/images/keys.jpg',
       ),
     ];
+  }
+
+  /// Inquiries other students already sent about the demo user's reports.
+  static Map<String, List<Message>> threads() {
+    final now = DateTime.now();
+    return {
+      '1': [
+        Message(
+          text: 'Hi! I think I saw a blue ID on the bleachers at the gym this morning. Is it yours?',
+          fromMe: false,
+          sender: 'Ana R.',
+          time: now.subtract(const Duration(minutes: 90)),
+        ),
+        Message(
+          text: 'Good afternoon, a student ID was turned in to the Security Office. Please drop by with another valid ID.',
+          fromMe: false,
+          sender: 'Security Office',
+          time: now.subtract(const Duration(minutes: 40)),
+        ),
+      ],
+      '2': [
+        Message(
+          text: 'Hello, I lost a green Aquaflask in SJH yesterday. Does yours have a scratch near the lid?',
+          fromMe: false,
+          sender: 'Mark T.',
+          time: now.subtract(const Duration(hours: 5)),
+        ),
+      ],
+    };
   }
 
   static List<AppNotification> notifications() {
