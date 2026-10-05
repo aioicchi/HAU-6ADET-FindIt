@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:findit/core/theme/app_colors.dart';
 import 'package:findit/core/theme/app_text_styles.dart';
 
-import 'onboarding_state.dart';
-
-/// Three intro slides: Browse, Report, Claim. Shown once after the splash
-/// screen, and again from Profile > How FindIt Works.
+/// Three intro slides: Browse, Report, Claim. Shown after the splash screen
+/// every time the app opens, and from Profile > How FindIt Works.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, required this.onDone});
 
@@ -55,10 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
-  void _finish() {
-    onboarding.markSeen();
-    widget.onDone();
-  }
+  void _finish() => widget.onDone();
 
   void _next() {
     if (_isLast) {

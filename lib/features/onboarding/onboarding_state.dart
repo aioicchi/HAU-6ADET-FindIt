@@ -1,28 +1,6 @@
-import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-/// Remembers, on this device, whether the intro slides were already shown.
-class OnboardingState {
-  static const _storageKey = 'findit_onboarded';
-
-  /// True until [load] says otherwise, so screens built without loading
-  /// (like tests) go straight to login.
-  bool seen = true;
-  SharedPreferences? _prefs;
-
-  Future<void> load() async {
-    try {
-      final prefs = _prefs = await SharedPreferences.getInstance();
-      seen = prefs.getBool(_storageKey) ?? false;
-    } catch (e) {
-      debugPrint('FindIt: could not load onboarding flag. $e');
-    }
-  }
-
-  void markSeen() {
-    seen = true;
-    _prefs?.setBool(_storageKey, true);
-  }
-}
-
-final onboarding = OnboardingState();
+/// Whether the splash screen shows the intro slides before login.
+///
+/// The app turns this on at startup (see main.dart), so the slides come up
+/// every time FindIt is opened. It's off otherwise, so tests can start
+/// straight at the login screen.
+bool showIntroOnLaunch = false;

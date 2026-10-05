@@ -20,8 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
       // Captured now: the onboarding moves on after this splash screen is gone.
       final navigator = Navigator.of(context);
-      // First visit on this device: the intro slides, then login.
-      final next = onboarding.seen
+      // Every time the app opens: the intro slides, then login.
+      final next = !showIntroOnLaunch
           ? const AuthGate()
           : OnboardingScreen(
               onDone: () => navigator.pushReplacement(MaterialPageRoute(builder: (_) => const AuthGate())),
