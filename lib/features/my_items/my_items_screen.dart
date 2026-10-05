@@ -11,7 +11,10 @@ import 'widgets/posts_tab_bar.dart';
 import 'widgets/stats_row.dart';
 
 class MyItemsScreen extends StatefulWidget {
-  const MyItemsScreen({super.key});
+  const MyItemsScreen({super.key, this.onReport});
+
+  /// Opens the Report tab, offered when there are no active reports.
+  final VoidCallback? onReport;
 
   @override
   State<MyItemsScreen> createState() => _MyItemsScreenState();
@@ -61,7 +64,20 @@ class _MyItemsScreenState extends State<MyItemsScreen> {
                   ),
                   const SizedBox(height: 10),
                   if (shown.isEmpty)
-                    EmptyState(_showResolved ? 'No resolved items yet.' : 'You have no active reports.')
+                    _showResolved
+                        ? const EmptyState(
+                            "When an item is back with its owner, mark it resolved and it moves here.",
+                            title: 'Nothing resolved yet',
+                            icon: Icons.task_alt,
+                          )
+                        : EmptyState(
+                            'Lost or found something? Report it, then track replies and claims here.',
+                            title: 'No active reports',
+                            icon: Icons.inventory_2_outlined,
+                            actionLabel: 'Report an item',
+                            actionIcon: Icons.add_box_outlined,
+                            onAction: widget.onReport,
+                          )
                   else
                     for (final (i, item) in shown.indexed) FadeSlideIn(key: ValueKey(item.id), index: i, child: MyItemCard(item)),
                 ],

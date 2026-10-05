@@ -45,9 +45,9 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: IndexedStack(index: _index, children: [
-          const HomeScreen(),
+          HomeScreen(onReport: () => _goTo(1)),
           ReportItemScreen(onSubmitted: () => _goTo(2)),
-          const MyItemsScreen(),
+          MyItemsScreen(onReport: () => _goTo(1)),
         ]),
         bottomNavigationBar: NavigationBar(
           selectedIndex: _index,

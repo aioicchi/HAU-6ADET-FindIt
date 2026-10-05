@@ -19,7 +19,7 @@ class ChatScreen extends StatelessWidget {
         builder: (context, _) {
           final item = store.findItem(itemId);
           if (item == null) {
-            return Scaffold(appBar: AppBar(), body: const EmptyState('This item is no longer available.'));
+            return const MissingReport();
           }
           final messages = store.thread(item.id);
           final isMine = item.ownerId == store.user?.id;
@@ -41,7 +41,13 @@ class ChatScreen extends StatelessWidget {
               ),
               Expanded(
                 child: messages.isEmpty
-                    ? const EmptyState('No messages yet. Say hello!', icon: Icons.chat_bubble_outline)
+                    ? EmptyState(
+                        isMine
+                            ? 'No one has messaged about this report yet. You\'ll get a notification when they do.'
+                            : 'Say hello below, and mention a detail that shows the item is yours.',
+                        title: isMine ? 'No messages yet' : 'Start the conversation',
+                        icon: Icons.chat_bubble_outline,
+                      )
                     : ListView(
                         padding: const EdgeInsets.all(12),
                         children: [for (final m in messages) MessageBubble(m)],

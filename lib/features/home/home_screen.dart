@@ -11,16 +11,35 @@ import 'widgets/filter_button.dart';
 import 'widgets/home_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.onReport});
+
+  /// Opens the Report tab, offered when there's nothing to browse yet.
+  final VoidCallback? onReport;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _search = TextEditingController();
   String _query = '';
   String? _category;
   HomeFilters _filters = const HomeFilters();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  void _clearAll() {
+    _search.clear();
+    setState(() {
+      _query = '';
+      _category = null;
+      _filters = const HomeFilters();
+    });
+  }
 
   List<Item> _visibleItems() {
     final q = _query.trim().toLowerCase();
@@ -64,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('SEARCH ITEMS...', style: AppTextStyles.label),
                   const SizedBox(height: 6),
                   TextField(
+                    controller: _search,
                     onChanged: (v) => setState(() => _query = v),
                     decoration: const InputDecoration(hintText: 'e.g. Blue Backpack, Keys...', prefixIcon: Icon(Icons.search, size: 18)),
                   ),
@@ -83,7 +103,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('${items.length} item${items.length == 1 ? '' : 's'}', style: AppTextStyles.caption),
                   const SizedBox(height: 10),
                   if (items.isEmpty)
-                    EmptyState(filtering ? 'No items match your search or filters.' : 'No items reported yet.', icon: Icons.search_off)
+                    filtering
+                        ? EmptyState(
+                            'Nothing matches your search or filters. Try a different word or fewer filters.',
+                            title: 'No matches',
+                            icon: Icons.search_off,
+                            actionLabel: 'Clear search & filters',
+                            actionIcon: Icons.filter_alt_off_outlined,
+                            onAction: _clearAll,
+                          )
+                        : EmptyState(
+                            'Be the first: report something you lost or found on campus.',
+                            title: 'Nothing reported yet',
+                            icon: Icons.travel_explore,
+                            actionLabel: 'Report an item',
+                            actionIcon: Icons.add_box_outlined,
+                            onAction: widget.onReport,
+                          )
                   else
                     for (final (i, item) in items.indexed)
                       FadeSlideIn(

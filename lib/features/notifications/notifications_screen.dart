@@ -19,7 +19,13 @@ class NotificationsScreen extends StatelessWidget {
           listenable: store,
           builder: (context, _) {
             final list = store.notifications;
-            if (list.isEmpty) return const EmptyState('Nothing here yet.', icon: Icons.notifications_none);
+            if (list.isEmpty) {
+              return const EmptyState(
+                'Possible matches, replies and claim updates will show up here.',
+                title: "You're all caught up",
+                icon: Icons.notifications_none,
+              );
+            }
             return ListView.separated(
               itemCount: list.length,
               separatorBuilder: (_, _) => const Divider(height: 1),

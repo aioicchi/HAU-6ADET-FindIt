@@ -27,7 +27,7 @@ class ItemDetailsScreen extends StatelessWidget {
         builder: (context, _) {
           final item = store.findItem(itemId);
           if (item == null) {
-            return Scaffold(appBar: AppBar(), body: const EmptyState('This item is no longer available.'));
+            return const MissingReport();
           }
           final isMine = item.ownerId == store.user?.id;
           final claimAt = item.claimAt;
