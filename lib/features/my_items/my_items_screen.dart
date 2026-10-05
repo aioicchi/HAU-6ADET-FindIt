@@ -23,6 +23,15 @@ class MyItemsScreen extends StatefulWidget {
 class _MyItemsScreenState extends State<MyItemsScreen> {
   bool _showResolved = false;
 
+  /// Bumped by pull to refresh. It's part of each card's key, so the cards
+  /// count as new and play their fade-in again.
+  int _round = 0;
+
+  Future<void> _refresh() async {
+    await store.refresh();
+    if (mounted) setState(() => _round++);
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('FindIt')),
@@ -35,7 +44,7 @@ class _MyItemsScreenState extends State<MyItemsScreen> {
             final shown = _showResolved ? resolved : active;
 
             return RefreshIndicator(
-              onRefresh: store.refresh,
+              onRefresh: _refresh,
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(), // So a short list can still be pulled.
                 padding: const EdgeInsets.all(12),
@@ -79,7 +88,7 @@ class _MyItemsScreenState extends State<MyItemsScreen> {
                             onAction: widget.onReport,
                           )
                   else
-                    for (final (i, item) in shown.indexed) FadeSlideIn(key: ValueKey(item.id), index: i, child: MyItemCard(item)),
+                    for (final (i, item) in shown.indexed) FadeSlideIn(key: ValueKey((_round, item.id)), index: i, child: MyItemCard(item)),
                 ],
               ),
             );

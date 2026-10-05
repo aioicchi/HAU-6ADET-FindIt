@@ -26,6 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _category;
   HomeFilters _filters = const HomeFilters();
 
+  /// Bumped by pull to refresh. It's part of each card's key, so the cards
+  /// count as new and play their fade-in again.
+  int _round = 0;
+
+  Future<void> _refresh() async {
+    await store.refresh();
+    if (mounted) setState(() => _round++);
+  }
+
   @override
   void dispose() {
     _search.dispose();
@@ -75,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
             final filtering = _query.isNotEmpty || _category != null || _filters.activeCount > 0;
 
             return RefreshIndicator(
-              onRefresh: store.refresh,
+              onRefresh: _refresh,
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(), // So a short list can still be pulled.
                 padding: const EdgeInsets.all(12),
@@ -123,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   else
                     for (final (i, item) in items.indexed)
                       FadeSlideIn(
-                        key: ValueKey(item.id),
+                        key: ValueKey((_round, item.id)),
                         index: i,
                         child: ItemCard(
                           item,
