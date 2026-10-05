@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+
+import 'package:findit/core/theme/app_colors.dart';
+import 'package:findit/core/theme/app_text_styles.dart';
+import 'package:findit/core/utils/date_format.dart';
+import 'package:findit/data/app_store.dart';
+import 'package:findit/data/models/item.dart';
+import 'package:findit/features/item_details/item_details_screen.dart';
+import 'package:findit/features/report/report_item_screen.dart';
+import 'package:findit/shared/shared.dart';
+
+class MyItemCard extends StatelessWidget {
+  const MyItemCard(this.item, {super.key});
+
+  final Item item;
+
+  String? get _statusLine {
+    if (item.resolved) return 'Resolved';
+    if (item.isLost && item.inquiries > 0) return 'Pending claim inquiries (${item.inquiries})';
+    return item.note;
+  }
+
+  Widget _smallButton(IconData icon, String label, VoidCallback onTap) => OutlinedButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, size: 12),
+        label: Text(label),
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(0, 28),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          side: const BorderSide(color: AppColors.line),
+          textStyle: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColors.line)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            StatusTag(item),
+            Text(timeAgo(item.date), style: AppTextStyles.mono),
+          ]),
+          const SizedBox(height: 8),
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            SizedBox(width: 56, child: ItemPhoto(item, height: 56)),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(item.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                Text('◉ ${item.location}', style: AppTextStyles.mono),
+                if (_statusLine != null) Text('● $_statusLine', style: AppTextStyles.mono),
+              ]),
+            ),
+          ]),
+          const SizedBox(height: 10),
+          Row(children: [
+            Flexible(child: _smallButton(Icons.edit, 'EDIT', () => pushPage(context, ReportItemScreen(editing: item)))),
+            const SizedBox(width: 6),
+            Flexible(
+              child: _smallButton(
+                item.resolved ? Icons.undo : Icons.check_circle_outline,
+                item.resolved ? 'REOPEN' : 'MARK RESOLVED',
+                () => store.toggleResolved(item),
+              ),
+            ),
+            const Spacer(),
+            FilledButton(
+              onPressed: () => pushPage(context, ItemDetailsScreen(itemId: item.id)),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(54, 28),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                textStyle: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
+              ),
+              child: const Text('VIEW'),
+            ),
+          ]),
+        ]),
+      );
+}

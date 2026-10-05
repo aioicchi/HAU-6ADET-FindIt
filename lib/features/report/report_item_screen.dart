@@ -1,0 +1,154 @@
+import 'package:flutter/material.dart';
+
+import 'package:findit/core/theme/app_text_styles.dart';
+import 'package:findit/core/utils/date_format.dart';
+import 'package:findit/core/utils/validators.dart';
+import 'package:findit/data/app_store.dart';
+import 'package:findit/data/models/item.dart';
+import 'package:findit/shared/shared.dart';
+
+import 'widgets/photo_upload_box.dart';
+
+/// Report a new item, or edit an existing one when [editing] is given.
+class ReportItemScreen extends StatefulWidget {
+  const ReportItemScreen({super.key, this.editing, this.onSubmitted});
+
+  final Item? editing;
+  final VoidCallback? onSubmitted;
+
+  @override
+  State<ReportItemScreen> createState() => _ReportItemScreenState();
+}
+
+class _ReportItemScreenState extends State<ReportItemScreen> {
+  final _form = GlobalKey<FormState>();
+  late final _name = TextEditingController(text: widget.editing?.name);
+  late final _description = TextEditingController(text: widget.editing?.description);
+  late final _location = TextEditingController(text: widget.editing?.location);
+  late final _contact = TextEditingController(text: widget.editing?.contact ?? store.user?.email);
+  late ItemStatus? _status = widget.editing?.status;
+  late DateTime _date = widget.editing?.date ?? DateTime.now();
+  late bool _hasPhoto = widget.editing?.hasPhoto ?? false;
+
+  bool get _isEdit => widget.editing != null;
+
+  @override
+  void dispose() {
+    for (final c in [_name, _description, _location, _contact]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _pickDate() async {
+    final d = await showDatePicker(context: context, initialDate: _date, firstDate: DateTime(2020), lastDate: DateTime.now());
+    if (d != null) setState(() => _date = d);
+  }
+
+  void _submit() {
+    if (!_form.currentState!.validate()) return;
+    final editing = widget.editing;
+
+    if (editing != null) {
+      editing
+        ..name = _name.text.trim()
+        ..description = _description.text.trim()
+        ..location = _location.text.trim()
+        ..contact = _contact.text.trim()
+        ..status = _status!
+        ..date = _date
+        ..hasPhoto = _hasPhoto;
+      store.changed();
+      Navigator.pop(context);
+      showSnack(context, 'Report updated.');
+      return;
+    }
+
+    store.addItem(Item(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      name: _name.text.trim(),
+      description: _description.text.trim(),
+      status: _status!,
+      location: _location.text.trim(),
+      date: _date,
+      contact: _contact.text.trim(),
+      ownerId: store.user!.id,
+      hasPhoto: _hasPhoto,
+    ));
+    _resetForm();
+    showSnack(context, 'Item reported successfully.');
+    widget.onSubmitted?.call();
+  }
+
+  void _resetForm() {
+    _form.currentState!.reset();
+    _name.clear();
+    _description.clear();
+    _location.clear();
+    setState(() {
+      _status = null;
+      _hasPhoto = false;
+      _date = DateTime.now();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(_isEdit ? 'Edit Report' : 'Report Item'),
+          automaticallyImplyLeading: _isEdit,
+        ),
+        body: Form(
+          key: _form,
+          child: ListView(padding: const EdgeInsets.all(14), children: [
+            const Text('INFORMATION ENTRY', style: AppTextStyles.label),
+            const SizedBox(height: 4),
+            const Text('Fill out the details below to register the item in the university database.', style: AppTextStyles.caption),
+            const Divider(height: 24),
+            const FieldLabel('Item name'),
+            TextFormField(controller: _name, decoration: const InputDecoration(hintText: 'Enter short title...'), validator: Validators.required),
+            const FieldLabel('Description'),
+            TextFormField(controller: _description, maxLines: 4, decoration: const InputDecoration(hintText: 'Detail color, material, distinguishing marks...')),
+            const FieldLabel('Status'),
+            DropdownButtonFormField<ItemStatus>(
+              initialValue: _status,
+              hint: const Text('Select Status', style: TextStyle(fontSize: 13)),
+              items: const [
+                DropdownMenuItem(value: ItemStatus.lost, child: Text('Lost')),
+                DropdownMenuItem(value: ItemStatus.found, child: Text('Found')),
+              ],
+              onChanged: (v) => setState(() => _status = v),
+              validator: (v) => v == null ? 'Select a status' : null,
+            ),
+            const FieldLabel('Location'),
+            TextFormField(
+              controller: _location,
+              decoration: const InputDecoration(hintText: 'Building, Room, or Area...', prefixIcon: Icon(Icons.place_outlined, size: 18)),
+              validator: Validators.required,
+            ),
+            const FieldLabel('Date'),
+            InkWell(
+              onTap: _pickDate,
+              child: InputDecorator(
+                decoration: const InputDecoration(prefixIcon: Icon(Icons.calendar_today_outlined, size: 18)),
+                child: Text(fullDate(_date), style: const TextStyle(fontSize: 13)),
+              ),
+            ),
+            const FieldLabel('Photo attachment'),
+            PhotoUploadBox(attached: _hasPhoto, onTap: () => setState(() => _hasPhoto = !_hasPhoto)),
+            const FieldLabel('Contact info'),
+            TextFormField(controller: _contact, decoration: const InputDecoration(hintText: 'Email or Phone Number...'), validator: Validators.required),
+            const Padding(
+              padding: EdgeInsets.only(top: 4),
+              child: Text('Only visible to administrators and verified claimers.', style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic)),
+            ),
+            const SizedBox(height: 20),
+            FilledButton.icon(
+              onPressed: _submit,
+              icon: const Icon(Icons.send, size: 16),
+              label: Text(_isEdit ? 'Save Changes' : 'Submit Report'),
+            ),
+          ]),
+        ),
+      );
+}

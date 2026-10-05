@@ -1,0 +1,5 @@
+package edu.hau.findit
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()
