@@ -4,6 +4,7 @@ import 'package:findit/core/theme/app_colors.dart';
 import 'package:findit/core/theme/theme_controller.dart';
 import 'package:findit/data/app_store.dart';
 import 'package:findit/features/notifications/notifications_screen.dart';
+import 'package:findit/features/onboarding/onboarding_screen.dart';
 import 'package:findit/shared/shared.dart';
 
 import 'edit_profile_screen.dart';
@@ -112,25 +113,9 @@ class ProfileScreen extends StatelessWidget {
         ),
       );
 
-  void _showHelp(BuildContext context) => showModalBottomSheet(
-        context: context,
-        builder: (_) => const Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('How FindIt Works', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-            SizedBox(height: 12),
-            Text('1. Lost something? Report it as LOST with where you last had it.'),
-            SizedBox(height: 6),
-            Text('2. Found something? Report it as FOUND and drop it at the Lost & Found office.'),
-            SizedBox(height: 6),
-            Text('3. See your item in the list? Tap Claim This Item and answer the finder\'s question to prove it\'s yours.'),
-            SizedBox(height: 6),
-            Text('4. Found something and got a claim? Review the answer, then Approve or Reject it.'),
-            SizedBox(height: 6),
-            Text('5. Use Contact to message the finder/owner, and mark your report as Resolved once it\'s returned.'),
-          ]),
-        ),
-      );
+  /// The same intro slides shown on first launch.
+  void _showHelp(BuildContext context) =>
+      pushPage(context, OnboardingScreen(onDone: () => Navigator.pop(context)));
 }
 
 class _Stat extends StatelessWidget {
