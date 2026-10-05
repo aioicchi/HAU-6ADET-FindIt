@@ -1,11 +1,11 @@
 {
-    "name": "findit",
-    "short_name": "findit",
+    "name": "FindIt: HAU Lost & Found",
+    "short_name": "FindIt",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#1E2A45",
+    "theme_color": "#1E2A45",
+    "description": "Report and find lost items around the Holy Angel University campus.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

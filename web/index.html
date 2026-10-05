@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,21 +18,76 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FindIt: report and find lost items around the Holy Angel University campus.">
+  <meta name="theme-color" content="#1E2A45">
+
+  <!-- Link previews when a FindIt link is shared in Messenger, Viber, etc. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FindIt: HAU Lost & Found">
+  <meta property="og:description" content="Lost something on campus? Found something? Report it, browse reports and claim your item on FindIt.">
+  <meta property="og:image" content="https://aioicchi.github.io/HAU-6ADET-FindIt/icons/Icon-512.png">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="findit">
+  <meta name="apple-mobile-web-app-title" content="FindIt">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>findit</title>
+  <title>FindIt: HAU Lost & Found</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Loading screen: shown while the app downloads, so the page isn't blank
+       white. It matches the app's splash screen and fades out on the first frame. -->
+  <style>
+    html, body { margin: 0; height: 100%; background: #1E2A45; }
+    #loading {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #1E2A45; color: #fff;
+      font-family: Roboto, "Segoe UI", system-ui, -apple-system, sans-serif;
+      transition: opacity .3s ease;
+    }
+    #loading.done { opacity: 0; pointer-events: none; }
+    #loading svg { width: 64px; height: 64px; }
+    #loading h1 { margin: 12px 0 4px; font-size: 32px; font-weight: 800; }
+    #loading p { margin: 0; opacity: .75; font-size: 14px; }
+    /* Positioned on its own so the logo sits exactly where the app's splash
+       screen draws it, and the hand-off doesn't jump. */
+    #loading .spinner {
+      position: absolute; top: calc(50% + 96px); left: calc(50% - 14px);
+      width: 28px; height: 28px; box-sizing: border-box; border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, .25); border-top-color: #fff;
+      animation: spin .9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      #loading { transition: none; }
+      #loading .spinner { animation-duration: 3s; }
+    }
+  </style>
 </head>
 <body>
+  <div id="loading" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="10" cy="10" r="6.5" fill="none" stroke="#fff" stroke-width="2.5"/>
+      <line x1="14.8" y1="14.8" x2="20" y2="20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <h1>FindIt</h1>
+    <p>University Lost &amp; Found</p>
+    <div class="spinner" aria-label="Loading"></div>
+  </div>
+  <script>
+    // Flutter fires this once the app has drawn its first frame.
+    window.addEventListener('flutter-first-frame', function () {
+      var loading = document.getElementById('loading');
+      loading.classList.add('done');
+      setTimeout(function () { loading.remove(); }, 400);
+    });
+  </script>
   <!--
     You can customize the "flutter_bootstrap.js" script.
     This is useful to provide a custom configuration to the Flutter loader
