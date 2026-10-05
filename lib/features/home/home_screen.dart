@@ -89,7 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       FadeSlideIn(
                         key: ValueKey(item.id),
                         index: i,
-                        child: ItemCard(item, onDetails: () => pushPage(context, ItemDetailsScreen(itemId: item.id))),
+                        child: ItemCard(
+                          item,
+                          heroTag: ItemPhoto.tagFor('home', item),
+                          onDetails: () => pushPage(context, ItemDetailsScreen(itemId: item.id, heroTag: ItemPhoto.tagFor('home', item))),
+                        ),
                       ),
                 ],
               ),

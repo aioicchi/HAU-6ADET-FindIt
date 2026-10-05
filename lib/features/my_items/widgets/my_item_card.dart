@@ -56,7 +56,7 @@ class MyItemCard extends StatelessWidget {
           ]),
           const SizedBox(height: 8),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(width: 56, child: ItemPhoto(item, height: 56)),
+            SizedBox(width: 56, child: ItemPhoto(item, height: 56, heroTag: ItemPhoto.tagFor('mine', item))),
             const SizedBox(width: 10),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -82,7 +82,7 @@ class MyItemCard extends StatelessWidget {
             ),
             const Spacer(),
             FilledButton(
-              onPressed: () => pushPage(context, ItemDetailsScreen(itemId: item.id)),
+              onPressed: () => pushPage(context, ItemDetailsScreen(itemId: item.id, heroTag: ItemPhoto.tagFor('mine', item))),
               style: FilledButton.styleFrom(
                 minimumSize: const Size(54, 28),
                 padding: const EdgeInsets.symmetric(horizontal: 12),

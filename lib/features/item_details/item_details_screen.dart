@@ -14,9 +14,12 @@ import 'widgets/share_sheet.dart';
 import 'widgets/visitor_actions.dart';
 
 class ItemDetailsScreen extends StatelessWidget {
-  const ItemDetailsScreen({super.key, required this.itemId});
+  const ItemDetailsScreen({super.key, required this.itemId, this.heroTag});
 
   final String itemId;
+
+  /// The tag of the photo this page was opened from, so it grows into the big photo.
+  final String? heroTag;
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
@@ -50,7 +53,7 @@ class ItemDetailsScreen extends StatelessWidget {
               ],
             ),
             body: ListView(padding: const EdgeInsets.all(14), children: [
-              ItemPhoto(item, height: 220, emptyLabel: 'Item Photo (Optional)', zoomable: true),
+              ItemPhoto(item, height: 220, emptyLabel: 'Item Photo (Optional)', zoomable: true, heroTag: heroTag),
               const FieldLabel('Item name'),
               ReadOnlyField(item.name),
               const FieldLabel('Current status'),
@@ -101,12 +104,12 @@ class _MatchTile extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.only(bottom: 6),
         child: InkWell(
-          onTap: () => pushPage(context, ItemDetailsScreen(itemId: item.id)),
+          onTap: () => pushPage(context, ItemDetailsScreen(itemId: item.id, heroTag: ItemPhoto.tagFor('match', item))),
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: AppColors.line)),
             child: Row(children: [
-              SizedBox(width: 52, child: ItemPhoto(item, height: 52)),
+              SizedBox(width: 52, child: ItemPhoto(item, height: 52, heroTag: ItemPhoto.tagFor('match', item))),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
