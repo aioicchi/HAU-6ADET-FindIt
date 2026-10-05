@@ -17,13 +17,16 @@ personal data.
 
 ## Screenshots
 
-<!-- TODO: add 2-3 phone-size screenshots to docs/assets/ and uncomment the table.
-| Home | Item details | Report item |
-| --- | --- | --- |
-| ![Home](docs/assets/screen-home.png) | ![Detail](docs/assets/screen-detail.png) | ![Report](docs/assets/screen-add.png) |
--->
+| Browse | Item details | Claim requests |
+| :---: | :---: | :---: |
+| <img src="docs/assets/screen-home.png" alt="Home screen listing lost and found items with photos" width="240"> | <img src="docs/assets/screen-detail.png" alt="Details of a found umbrella with where to claim it" width="240"> | <img src="docs/assets/screen-claims.png" alt="A pending claim with Approve and Reject buttons" width="240"> |
 
-_Screenshots coming soon._
+| Report an item | Night mode |
+| :---: | :---: |
+| <img src="docs/assets/screen-add.png" alt="Report form with category, status and location" width="240"> | <img src="docs/assets/screen-dark.png" alt="Home screen in night mode" width="240"> |
+
+Screenshots are rendered from the app itself with the demo data:
+`flutter test tool/screenshots_test.dart --update-goldens` regenerates them.
 
 ## What it does
 

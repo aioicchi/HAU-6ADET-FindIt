@@ -5,6 +5,10 @@ import 'app_colors.dart';
 class AppTheme {
   AppTheme._();
 
+  /// The app font. Styles that set their own size or weight should name it too,
+  /// so they never fall back to a different font.
+  static const font = 'Roboto';
+
   /// The theme for whichever palette [AppColors] is currently using.
   static ThemeData get current {
     final border = OutlineInputBorder(
@@ -17,6 +21,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
+      fontFamily: font,
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF1E2A45),
         brightness: brightness,
@@ -34,7 +39,12 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: TextStyle(color: AppColors.dark ? AppColors.text : AppColors.navy, fontSize: 16, fontWeight: FontWeight.w700),
+        titleTextStyle: TextStyle(
+          fontFamily: font,
+          color: AppColors.dark ? AppColors.text : AppColors.navy,
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        ),
         shape: Border(bottom: BorderSide(color: AppColors.line)),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -53,7 +63,7 @@ class AppTheme {
           foregroundColor: Colors.white,
           minimumSize: const Size.fromHeight(48),
           shape: shape,
-          textStyle: const TextStyle(fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(fontFamily: font, fontWeight: FontWeight.w700),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(

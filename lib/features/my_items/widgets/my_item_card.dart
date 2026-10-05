@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
+import 'package:findit/core/theme/app_theme.dart';
 import 'package:findit/core/theme/app_text_styles.dart';
 import 'package:findit/core/utils/date_format.dart';
 import 'package:findit/data/app_store.dart';
@@ -38,7 +39,7 @@ class MyItemCard extends StatelessWidget {
           minimumSize: const Size(0, 28),
           padding: const EdgeInsets.symmetric(horizontal: 8),
           side: BorderSide(color: AppColors.line),
-          textStyle: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(fontFamily: AppTheme.font, fontSize: 9, fontWeight: FontWeight.w700),
         ),
       );
 
@@ -81,7 +82,7 @@ class MyItemCard extends StatelessWidget {
               style: FilledButton.styleFrom(
                 minimumSize: const Size(54, 28),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                textStyle: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
+                textStyle: const TextStyle(fontFamily: AppTheme.font, fontSize: 9, fontWeight: FontWeight.w700),
               ),
               child: const Text('VIEW'),
             ),

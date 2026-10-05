@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_colors.dart';
+import 'package:findit/core/theme/app_theme.dart';
 import 'package:findit/data/models/item.dart';
 
 import 'item_photo.dart';
@@ -35,7 +36,7 @@ class ItemCard extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(0, 30),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                textStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: .6),
+                textStyle: const TextStyle(fontFamily: AppTheme.font, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: .6),
               ),
               child: const Text('DETAILS'),
             ),

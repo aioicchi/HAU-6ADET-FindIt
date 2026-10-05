@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(children: [
                   _categoryChip('All', null),
-                  for (final c in Item.categories) _categoryChip(c[0] + c.substring(1).toLowerCase(), c),
+                  for (final c in Item.categories) _categoryChip(Item.categoryLabel(c), c),
                 ]),
               ),
               const SizedBox(height: 12),

@@ -207,7 +207,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
               hint: const Text('Select Category', style: TextStyle(fontSize: 13)),
               items: [
                 for (final c in Item.categories)
-                  DropdownMenuItem(value: c, child: Text(c[0] + c.substring(1).toLowerCase())),
+                  DropdownMenuItem(value: c, child: Text(Item.categoryLabel(c))),
               ],
               onChanged: (v) => setState(() => _category = v),
               validator: (v) => v == null ? 'Select a category' : null,

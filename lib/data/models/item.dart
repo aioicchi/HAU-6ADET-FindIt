@@ -12,6 +12,10 @@ class Item {
   /// Choices for the report form. The picked one is stored as the item's first tag.
   static const categories = ['ID CARD', 'KEYS', 'BAG', 'WALLET', 'ELECTRONICS', 'TUMBLER', 'UMBRELLA', 'CLOTHING', 'OTHER'];
 
+  /// "ID CARD" -> "ID Card", "KEYS" -> "Keys".
+  static String categoryLabel(String c) =>
+      c == 'ID CARD' ? 'ID Card' : c[0] + c.substring(1).toLowerCase();
+
   Item({
     required this.id,
     required this.name,
