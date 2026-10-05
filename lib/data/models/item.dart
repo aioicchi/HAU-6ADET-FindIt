@@ -22,6 +22,7 @@ class Item {
     required this.description,
     required this.status,
     required this.location,
+    this.spot,
     required this.date,
     required this.contact,
     required this.ownerId,
@@ -44,6 +45,7 @@ class Item {
       description: j['description'] as String,
       status: ItemStatus.values.byName(j['status'] as String),
       location: j['location'] as String,
+      spot: j['spot'] as String?,
       date: DateTime.parse(j['date'] as String),
       contact: j['contact'] as String,
       ownerId: j['ownerId'] as String,
@@ -64,7 +66,18 @@ class Item {
   String name;
   String description;
   ItemStatus status;
+  /// The building or area, usually one of [campusLocations]. Filters group by this.
   String location;
+
+  /// Optional room or exact spot inside [location], e.g. "Room 304".
+  String? spot;
+
+  /// "SJH (St. Joseph Hall) · Room 304", or just the building.
+  String get fullLocation {
+    final s = spot;
+    return s == null || s.isEmpty ? location : '$location · $s';
+  }
+
   DateTime date;
   String contact;
   List<String> tags;
@@ -115,6 +128,7 @@ class Item {
       'description': description,
       'status': status.name,
       'location': location,
+      'spot': spot,
       'date': date.toIso8601String(),
       'contact': contact,
       'ownerId': ownerId,

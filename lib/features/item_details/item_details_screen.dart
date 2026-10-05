@@ -48,8 +48,8 @@ class ItemDetailsScreen extends StatelessWidget {
               ReadOnlyField(item.name),
               const FieldLabel('Current status'),
               ReadOnlyField(item.resolved ? '[RESOLVED]' : '[${item.statusLabel}]'),
-              const FieldLabel('Found/Lost at (location)'),
-              ReadOnlyField(item.location, icon: Icons.place_outlined),
+              FieldLabel(item.isLost ? 'Lost at' : 'Found at'),
+              ReadOnlyField(item.fullLocation, icon: Icons.place_outlined),
               if (!item.isLost && claimAt != null && claimAt.isNotEmpty) ...[
                 const FieldLabel('Where to claim'),
                 ReadOnlyField(claimAt, icon: Icons.storefront_outlined),
@@ -104,7 +104,7 @@ class _MatchTile extends StatelessWidget {
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(item.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                  Text(item.location, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(item.fullLocation, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                   Text(item.whenLabel, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                 ]),
               ),

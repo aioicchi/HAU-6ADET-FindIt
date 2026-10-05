@@ -7,6 +7,7 @@ import 'package:findit/core/theme/app_text_styles.dart';
 import 'package:findit/core/utils/date_format.dart';
 import 'package:findit/core/utils/validators.dart';
 import 'package:findit/data/app_store.dart';
+import 'package:findit/data/campus.dart';
 import 'package:findit/data/models/item.dart';
 import 'package:findit/shared/shared.dart';
 
@@ -27,7 +28,10 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   final _form = GlobalKey<FormState>();
   late final _name = TextEditingController(text: widget.editing?.name);
   late final _description = TextEditingController(text: widget.editing?.description);
-  late final _location = TextEditingController(text: widget.editing?.location);
+  // Location: a campus place from the picker (or "Other…" with free text), plus an optional spot.
+  late String? _place = _initialPlace;
+  late final _otherPlace = TextEditingController(text: _place == otherLocation ? widget.editing?.location : null);
+  late final _spot = TextEditingController(text: widget.editing?.spot);
   late final _contact = TextEditingController(text: widget.editing?.contact ?? store.user?.email);
   late final _claimAt = TextEditingController(text: widget.editing?.claimAt);
   late final _verifyQuestion = TextEditingController(text: widget.editing?.verifyQuestion);
@@ -40,6 +44,20 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
 
   bool get _isEdit => widget.editing != null;
 
+  /// Editing a report whose location isn't on the campus list shows it under "Other…".
+  String? get _initialPlace {
+    final location = widget.editing?.location;
+    if (location == null) return null;
+    return campusLocations.contains(location) ? location : otherLocation;
+  }
+
+  String get _locationValue => _place == otherLocation ? _otherPlace.text.trim() : _place!;
+
+  String? get _spotValue {
+    final s = _spot.text.trim();
+    return s.isEmpty ? null : s;
+  }
+
   ImageProvider? get _preview {
     final bytes = _photo;
     if (bytes != null) return MemoryImage(bytes);
@@ -50,7 +68,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
 
   @override
   void dispose() {
-    for (final c in [_name, _description, _location, _contact, _claimAt, _verifyQuestion]) {
+    for (final c in [_name, _description, _otherPlace, _spot, _contact, _claimAt, _verifyQuestion]) {
       c.dispose();
     }
     super.dispose();
@@ -136,7 +154,8 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
         ..verifyQuestion = _foundOnly(_verifyQuestion)
         ..name = _name.text.trim()
         ..description = _description.text.trim()
-        ..location = _location.text.trim()
+        ..location = _locationValue
+        ..spot = _spotValue
         ..contact = _contact.text.trim()
         ..status = _status!
         ..date = _date
@@ -154,7 +173,8 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
       name: _name.text.trim(),
       description: _description.text.trim(),
       status: _status!,
-      location: _location.text.trim(),
+      location: _locationValue,
+      spot: _spotValue,
       date: _date,
       contact: _contact.text.trim(),
       ownerId: store.user!.id,
@@ -173,12 +193,14 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     _form.currentState!.reset();
     _name.clear();
     _description.clear();
-    _location.clear();
+    _otherPlace.clear();
+    _spot.clear();
     _claimAt.clear();
     _verifyQuestion.clear();
     setState(() {
       _status = null;
       _category = null;
+      _place = null;
       _hasPhoto = false;
       _photo = null;
       _photoAsset = null;
@@ -225,11 +247,38 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
               onChanged: (v) => setState(() => _status = v),
               validator: (v) => v == null ? 'Select a status' : null,
             ),
-            const FieldLabel('Location'),
+            FieldLabel(switch (_status) {
+              ItemStatus.found => 'Where did you find it?',
+              ItemStatus.lost => 'Where did you lose it?',
+              null => 'Location',
+            }),
+            DropdownButtonFormField<String>(
+              initialValue: _place,
+              isExpanded: true,
+              hint: const Text('Select building or area', style: TextStyle(fontSize: 13)),
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.place_outlined, size: 18)),
+              items: [
+                for (final p in [...campusLocations, otherLocation])
+                  DropdownMenuItem(value: p, child: Text(p, overflow: TextOverflow.ellipsis)),
+              ],
+              onChanged: (v) => setState(() => _place = v),
+              validator: (v) => v == null ? 'Select where it was' : null,
+            ),
+            if (_place == otherLocation) ...[
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _otherPlace,
+                decoration: const InputDecoration(hintText: 'Name the place, e.g. Jeepney terminal'),
+                validator: Validators.required,
+              ),
+            ],
+            const SizedBox(height: 8),
             TextFormField(
-              controller: _location,
-              decoration: const InputDecoration(hintText: 'Building, Room, or Area...', prefixIcon: Icon(Icons.place_outlined, size: 18)),
-              validator: Validators.required,
+              controller: _spot,
+              decoration: const InputDecoration(
+                hintText: 'Room or exact spot (optional), e.g. Room 304',
+                prefixIcon: Icon(Icons.meeting_room_outlined, size: 18),
+              ),
             ),
             if (_status == ItemStatus.found) ...[
               const FieldLabel('Where can the owner claim it? (optional)'),

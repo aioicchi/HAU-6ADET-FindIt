@@ -27,7 +27,7 @@ class ItemCard extends StatelessWidget {
           ]),
           const SizedBox(height: 8),
           const Text('Location', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700)),
-          Text(item.location, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(item.fullLocation, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           const SizedBox(height: 8),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(item.whenLabel, style: TextStyle(fontSize: 11, color: AppColors.muted)),

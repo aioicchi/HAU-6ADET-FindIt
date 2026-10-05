@@ -31,7 +31,7 @@ Screenshots are rendered from the app itself with the demo data:
 ## What it does
 
 - **Browse and search** every lost and found report on campus, and filter by category, Lost or Found, and location, sort by date, or include resolved items.
-- **Report an item** with a name, category, description, location, date and a photo taken with the camera or picked from the gallery.
+- **Report an item** with a name, category, description, date, a photo taken with the camera or picked from the gallery, and where it was: a campus building picked from a list (or "Other…") plus an optional room or exact spot.
 - **View item details**, with a full-screen photo you can zoom and, for found items, where to claim it. Then **message the owner or finder** to arrange a return. Contact details stay private.
 - **Claim a found item:** answer the finder's verification question (e.g. "What name is printed on the card?"). The finder approves or rejects, and an approved claim tells you where to pick it up. Finders review claims on their own reports, and approving one marks the item resolved.
 - **Automatic matching:** when you report an item, FindIt looks for reports on the other side (lost vs found) with the same category or a similar name, notifies you, and lists them under "Possible matches".

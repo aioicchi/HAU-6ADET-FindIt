@@ -60,7 +60,7 @@ class MyItemCard extends StatelessWidget {
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(item.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                Text('◉ ${item.location}', style: AppTextStyles.mono),
+                Text('◉ ${item.fullLocation}', style: AppTextStyles.mono),
                 if (_statusLine != null) Text('● $_statusLine', style: AppTextStyles.mono),
               ]),
             ),

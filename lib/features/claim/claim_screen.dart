@@ -50,7 +50,7 @@ class _ClaimScreenState extends State<ClaimScreen> {
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(item.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  Text(item.location, style: AppTextStyles.caption),
+                  Text(item.fullLocation, style: AppTextStyles.caption),
                   Text(item.whenLabel, style: AppTextStyles.caption),
                 ]),
               ),

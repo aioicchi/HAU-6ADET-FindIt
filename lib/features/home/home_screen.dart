@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:findit/core/theme/app_text_styles.dart';
 import 'package:findit/data/app_store.dart';
+import 'package:findit/data/campus.dart';
 import 'package:findit/data/models/item.dart';
 import 'package:findit/features/item_details/item_details_screen.dart';
 import 'package:findit/shared/shared.dart';
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (!_filters.matches(i)) return false;
       if (_category != null && !i.tags.contains(_category)) return false;
       if (q.isEmpty) return true;
-      return '${i.name} ${i.location} ${i.description} ${i.tags.join(' ')}'.toLowerCase().contains(q);
+      return '${i.name} ${i.fullLocation} ${i.description} ${i.tags.join(' ')}'.toLowerCase().contains(q);
     }).toList()
       ..sort((a, b) => _filters.newestFirst ? b.date.compareTo(a.date) : a.date.compareTo(b.date));
   }
@@ -49,7 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
           listenable: store,
           builder: (context, _) {
             final items = _visibleItems();
-            final locations = {for (final i in store.items) i.location}.toList()..sort();
+            // Campus places that have reports, in campus-list order, then any "Other…" places.
+            final used = {for (final i in store.items) i.location};
+            final locations = [
+              ...campusLocations.where(used.contains),
+              ...(used.difference(campusLocations.toSet()).toList()..sort()),
+            ];
             final filtering = _query.isNotEmpty || _category != null || _filters.activeCount > 0;
 
             return ListView(padding: const EdgeInsets.all(12), children: [
