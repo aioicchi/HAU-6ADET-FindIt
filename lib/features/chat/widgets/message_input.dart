@@ -41,9 +41,10 @@ class _MessageInputState extends State<MessageInput> {
             ),
             const SizedBox(width: 8),
             IconButton.filled(
+              tooltip: 'Send message',
               onPressed: _send,
               icon: const Icon(Icons.send, size: 18),
-              style: IconButton.styleFrom(backgroundColor: AppColors.navy),
+              style: IconButton.styleFrom(backgroundColor: AppColors.navy, foregroundColor: AppColors.onNavy),
             ),
           ]),
         ),

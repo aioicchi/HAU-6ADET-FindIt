@@ -41,23 +41,33 @@ class FilterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final n = value.activeCount;
-    return InkWell(
-      onTap: () => _open(context),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: n > 0 ? AppColors.navy : AppColors.surface,
-          border: Border.all(color: n > 0 ? AppColors.navy : AppColors.line),
-        ),
-        child: Row(children: [
-          Icon(Icons.tune, size: 14, color: n > 0 ? Colors.white : null),
-          const SizedBox(width: 4),
-          Text(
-            n > 0 ? 'FILTER ($n)' : 'FILTER',
-            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: n > 0 ? Colors.white : null),
+    // Its own labelled button (not merged with the heading next to it), at
+    // least 48 px tall so it's easy to tap.
+    return Semantics(
+      button: true,
+      container: true,
+      label: n > 0 ? 'Filters, $n active' : 'Filters',
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: () => _open(context),
+        child: AnimatedContainer(
+          duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 200),
+          constraints: const BoxConstraints(minHeight: 48),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: n > 0 ? AppColors.navy : AppColors.surface,
+            border: Border.all(color: n > 0 ? AppColors.navy : AppColors.line),
           ),
-          Icon(Icons.keyboard_arrow_down, size: 16, color: n > 0 ? Colors.white : null),
-        ]),
+          child: Row(children: [
+            Icon(Icons.tune, size: 14, color: n > 0 ? AppColors.onNavy : null),
+            const SizedBox(width: 4),
+            Text(
+              n > 0 ? 'FILTER ($n)' : 'FILTER',
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: n > 0 ? AppColors.onNavy : null),
+            ),
+            Icon(Icons.keyboard_arrow_down, size: 16, color: n > 0 ? AppColors.onNavy : null),
+          ]),
+        ),
       ),
     );
   }

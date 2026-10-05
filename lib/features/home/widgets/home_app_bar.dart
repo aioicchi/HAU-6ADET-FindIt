@@ -26,7 +26,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ListenableBuilder(
             listenable: store,
             builder: (context, _) => IconButton(
-              tooltip: 'Notifications',
+              tooltip: store.unreadCount > 0 ? 'Notifications, ${store.unreadCount} unread' : 'Notifications',
               icon: Badge(
                 isLabelVisible: store.unreadCount > 0,
                 label: Text('${store.unreadCount}'),

@@ -16,6 +16,8 @@ class StatusTag extends StatelessWidget {
       decoration: BoxDecoration(color: AppColors.surface, border: Border.all(color: color)),
       child: Text(
         item.resolved ? '[RESOLVED]' : '[${item.statusLabel}]',
+        // Read as "Lost", not "left bracket LOST right bracket".
+        semanticsLabel: item.resolved ? 'Resolved' : (item.isLost ? 'Lost' : 'Found'),
         style: TextStyle(fontFamily: 'monospace', fontSize: 10, fontWeight: FontWeight.w700, color: color),
       ),
     );

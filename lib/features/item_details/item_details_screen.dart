@@ -54,7 +54,7 @@ class ItemDetailsScreen extends StatelessWidget {
               const FieldLabel('Item name'),
               ReadOnlyField(item.name),
               const FieldLabel('Current status'),
-              ReadOnlyField(item.resolved ? '[RESOLVED]' : '[${item.statusLabel}]'),
+              ReadOnlyField(item.resolved ? 'Resolved' : (item.isLost ? 'Lost' : 'Found')),
               FieldLabel(item.isLost ? 'Lost at' : 'Found at'),
               ReadOnlyField(item.fullLocation, icon: Icons.place_outlined),
               if (!item.isLost && claimAt != null && claimAt.isNotEmpty) ...[

@@ -1,6 +1,7 @@
 export 'utils/ui_helpers.dart';
 export 'widgets/chip_tag.dart';
 export 'widgets/empty_state.dart';
+export 'widgets/fade_slide_in.dart';
 export 'widgets/field_label.dart';
 export 'widgets/item_card.dart';
 export 'widgets/item_photo.dart';

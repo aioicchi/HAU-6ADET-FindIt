@@ -55,10 +55,10 @@ class _MainShellState extends State<MainShell> {
           indicatorColor: AppColors.navy,
           height: 62,
           onDestinationSelected: _goTo,
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.search), selectedIcon: Icon(Icons.search, color: Colors.white), label: 'Browse'),
-            NavigationDestination(icon: Icon(Icons.add_box_outlined), selectedIcon: Icon(Icons.add_box, color: Colors.white), label: 'Report'),
-            NavigationDestination(icon: Icon(Icons.list_alt), selectedIcon: Icon(Icons.list_alt, color: Colors.white), label: 'My Items'),
+          destinations: [
+            NavigationDestination(icon: const Icon(Icons.search), selectedIcon: Icon(Icons.search, color: AppColors.onNavy), label: 'Browse'),
+            NavigationDestination(icon: const Icon(Icons.add_box_outlined), selectedIcon: Icon(Icons.add_box, color: AppColors.onNavy), label: 'Report'),
+            NavigationDestination(icon: const Icon(Icons.list_alt), selectedIcon: Icon(Icons.list_alt, color: AppColors.onNavy), label: 'My Items'),
           ],
         ),
       );

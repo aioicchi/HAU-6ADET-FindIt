@@ -27,7 +27,13 @@ class VisitorActions extends StatelessWidget {
     final canClaim = !item.resolved && (myClaim == null || myClaim.status == ClaimStatus.rejected);
 
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      if (myClaim != null) ClaimStatusCard(claim: myClaim, item: item),
+      // Cross-fades from "pending" to the finder's decision.
+      AnimatedSwitcher(
+        duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 300),
+        child: myClaim == null
+            ? const SizedBox.shrink()
+            : ClaimStatusCard(key: ValueKey('${myClaim.id}-${myClaim.status.name}'), claim: myClaim, item: item),
+      ),
       if (canClaim) ...[
         FilledButton.icon(
           icon: const Icon(Icons.verified_user_outlined, size: 18),

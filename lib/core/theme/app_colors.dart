@@ -13,6 +13,9 @@ class AppColors {
 
   /// Brand color: buttons, selected states, icons and titles.
   static Color get navy => _p.navy;
+
+  /// Text and icons drawn on top of [navy] (buttons, selected tabs, avatars).
+  static Color get onNavy => _p.onNavy;
   static Color get background => _p.background;
 
   /// Cards, inputs, app bar and other raised areas.
@@ -30,12 +33,13 @@ class AppColors {
 
   static const _day = _Palette(
     navy: Color(0xFF1E2A45),
+    onNavy: Colors.white,
     background: Color(0xFFF2F3F5),
     surface: Colors.white,
     line: Color(0xFFD0D3D9),
     text: Color(0xDD000000),
-    muted: Color(0xFF6B7280),
-    hint: Color(0xFF9CA3AF),
+    muted: Color(0xFF5B6371),
+    hint: Color(0xFF6B7280),
     label: Color(0xFF4B5563),
     lost: Color(0xFFC0392B),
     found: Color(0xFF1E8E5A),
@@ -45,13 +49,14 @@ class AppColors {
   );
 
   static const _night = _Palette(
-    navy: Color(0xFF5B7BC0),
+    navy: Color(0xFF7B97D6),
+    onNavy: Color(0xFF10151F),
     background: Color(0xFF121417),
     surface: Color(0xFF1C1F24),
     line: Color(0xFF33373F),
     text: Color(0xFFE5E7EB),
     muted: Color(0xFF9CA3AF),
-    hint: Color(0xFF6B7280),
+    hint: Color(0xFF8B93A0),
     label: Color(0xFFB4BAC4),
     lost: Color(0xFFEF6B5E),
     found: Color(0xFF3DBE7F),
@@ -64,6 +69,7 @@ class AppColors {
 class _Palette {
   const _Palette({
     required this.navy,
+    required this.onNavy,
     required this.background,
     required this.surface,
     required this.line,
@@ -79,6 +85,7 @@ class _Palette {
   });
 
   final Color navy;
+  final Color onNavy;
   final Color background;
   final Color surface;
   final Color line;

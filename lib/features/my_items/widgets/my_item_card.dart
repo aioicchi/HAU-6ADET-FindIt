@@ -31,10 +31,11 @@ class MyItemCard extends StatelessWidget {
     return parts.isEmpty ? item.note : parts.join(' · ');
   }
 
-  Widget _smallButton(IconData icon, String label, VoidCallback onTap) => OutlinedButton.icon(
+  /// [spoken] is what a screen reader says, naming the item ("Edit Umbrella").
+  Widget _smallButton(IconData icon, String label, String spoken, VoidCallback onTap) => OutlinedButton.icon(
         onPressed: onTap,
         icon: Icon(icon, size: 12),
-        label: Text(label),
+        label: Text(label, semanticsLabel: spoken),
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(0, 28),
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -67,12 +68,15 @@ class MyItemCard extends StatelessWidget {
           ]),
           const SizedBox(height: 10),
           Row(children: [
-            Flexible(child: _smallButton(Icons.edit, 'EDIT', () => pushPage(context, ReportItemScreen(editing: item)))),
+            Flexible(
+              child: _smallButton(Icons.edit, 'EDIT', 'Edit ${item.name}', () => pushPage(context, ReportItemScreen(editing: item))),
+            ),
             const SizedBox(width: 6),
             Flexible(
               child: _smallButton(
                 item.resolved ? Icons.undo : Icons.check_circle_outline,
                 item.resolved ? 'REOPEN' : 'MARK RESOLVED',
+                item.resolved ? 'Reopen ${item.name}' : 'Mark ${item.name} as resolved',
                 () => store.toggleResolved(item),
               ),
             ),
@@ -84,7 +88,7 @@ class MyItemCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 textStyle: const TextStyle(fontFamily: AppTheme.font, fontSize: 9, fontWeight: FontWeight.w700),
               ),
-              child: const Text('VIEW'),
+              child: Text('VIEW', semanticsLabel: 'View ${item.name}'),
             ),
           ]),
         ]),

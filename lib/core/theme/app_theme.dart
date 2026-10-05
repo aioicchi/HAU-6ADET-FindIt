@@ -26,7 +26,7 @@ class AppTheme {
         seedColor: const Color(0xFF1E2A45),
         brightness: brightness,
         primary: AppColors.navy,
-        onPrimary: Colors.white,
+        onPrimary: AppColors.onNavy,
         surface: AppColors.surface,
         onSurface: AppColors.text,
         error: AppColors.lost,
@@ -60,7 +60,7 @@ class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.navy,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.onNavy,
           minimumSize: const Size.fromHeight(48),
           shape: shape,
           textStyle: const TextStyle(fontFamily: font, fontWeight: FontWeight.w700),

@@ -38,7 +38,7 @@ class ItemCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 textStyle: const TextStyle(fontFamily: AppTheme.font, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: .6),
               ),
-              child: const Text('DETAILS'),
+              child: Text('DETAILS', semanticsLabel: 'View details for ${item.name}'),
             ),
           ]),
         ]),

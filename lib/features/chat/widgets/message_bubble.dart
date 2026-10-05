@@ -30,7 +30,7 @@ class MessageBubble extends StatelessWidget {
               color: mine ? AppColors.navy : AppColors.surface,
               border: Border.all(color: AppColors.line),
             ),
-            child: Text(message.text, style: TextStyle(color: mine ? Colors.white : AppColors.text, fontSize: 13)),
+            child: Text(message.text, style: TextStyle(color: mine ? AppColors.onNavy : AppColors.text, fontSize: 13)),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 2, bottom: 10),

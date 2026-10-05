@@ -18,13 +18,18 @@ class PostsTabBar extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   Widget _tab(String label, bool selected, VoidCallback onTap) => Expanded(
-        child: InkWell(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            color: selected ? AppColors.navy : Colors.transparent,
-            alignment: Alignment.center,
-            child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: selected ? Colors.white : AppColors.navy)),
+        child: Semantics(
+          selected: selected,
+          button: true,
+          child: InkWell(
+            onTap: onTap,
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 48),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              color: selected ? AppColors.navy : Colors.transparent,
+              alignment: Alignment.center,
+              child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: selected ? AppColors.onNavy : AppColors.navy)),
+            ),
           ),
         ),
       );

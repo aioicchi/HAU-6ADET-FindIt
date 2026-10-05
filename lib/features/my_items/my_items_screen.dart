@@ -31,35 +31,42 @@ class _MyItemsScreenState extends State<MyItemsScreen> {
             final resolved = mine.where((i) => i.resolved).toList();
             final shown = _showResolved ? resolved : active;
 
-            return ListView(padding: const EdgeInsets.all(12), children: [
-              Row(children: [
-                const Expanded(child: Text('My Reported Items', style: AppTextStyles.sectionTitle)),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  color: AppColors.navy,
-                  child: Text('${active.length} ACTIVE', style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w700)),
-                ),
-              ]),
-              Text('Track status, edits, and resolved items', style: AppTextStyles.caption),
-              const SizedBox(height: 12),
-              PostsTabBar(
-                activeCount: active.length,
-                resolvedCount: resolved.length,
-                showResolved: _showResolved,
-                onChanged: (v) => setState(() => _showResolved = v),
+            return RefreshIndicator(
+              onRefresh: store.refresh,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(), // So a short list can still be pulled.
+                padding: const EdgeInsets.all(12),
+                children: [
+                  Row(children: [
+                    const Expanded(child: Text('My Reported Items', style: AppTextStyles.sectionTitle)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      color: AppColors.navy,
+                      child: Text('${active.length} ACTIVE', style: TextStyle(color: AppColors.onNavy, fontSize: 9, fontWeight: FontWeight.w700)),
+                    ),
+                  ]),
+                  Text('Track status, edits, and resolved items', style: AppTextStyles.caption),
+                  const SizedBox(height: 12),
+                  PostsTabBar(
+                    activeCount: active.length,
+                    resolvedCount: resolved.length,
+                    showResolved: _showResolved,
+                    onChanged: (v) => setState(() => _showResolved = v),
+                  ),
+                  const SizedBox(height: 10),
+                  StatsRow(
+                    lost: active.where((i) => i.status == ItemStatus.lost).length,
+                    found: active.where((i) => i.status == ItemStatus.found).length,
+                    inquiries: active.fold(0, (sum, i) => sum + i.inquiries),
+                  ),
+                  const SizedBox(height: 10),
+                  if (shown.isEmpty)
+                    EmptyState(_showResolved ? 'No resolved items yet.' : 'You have no active reports.')
+                  else
+                    for (final (i, item) in shown.indexed) FadeSlideIn(key: ValueKey(item.id), index: i, child: MyItemCard(item)),
+                ],
               ),
-              const SizedBox(height: 10),
-              StatsRow(
-                lost: active.where((i) => i.status == ItemStatus.lost).length,
-                found: active.where((i) => i.status == ItemStatus.found).length,
-                inquiries: active.fold(0, (sum, i) => sum + i.inquiries),
-              ),
-              const SizedBox(height: 10),
-              if (shown.isEmpty)
-                EmptyState(_showResolved ? 'No resolved items yet.' : 'You have no active reports.')
-              else
-                for (final item in shown) MyItemCard(item),
-            ]);
+            );
           },
         ),
       );

@@ -23,13 +23,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: AppColors.navy,
-        body: const Center(
+        body: Center(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Icon(Icons.search, color: Colors.white, size: 64),
-            SizedBox(height: 12),
-            Text('FindIt', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w800)),
-            SizedBox(height: 4),
-            Text('University Lost & Found', style: TextStyle(color: Colors.white70)),
+            Icon(Icons.search, color: AppColors.onNavy, size: 64),
+            const SizedBox(height: 12),
+            Text('FindIt', style: TextStyle(color: AppColors.onNavy, fontSize: 32, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 4),
+            Text('University Lost & Found', style: TextStyle(color: AppColors.onNavy.withValues(alpha: .75))),
           ]),
         ),
       );

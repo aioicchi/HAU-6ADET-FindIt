@@ -44,12 +44,35 @@ class AppStore extends ChangeNotifier {
       final raw = prefs.getString(_storageKey);
       if (raw == null) return; // First run: keep the demo data.
       _fromJson(jsonDecode(raw) as Map<String, dynamic>);
-      // A claim sent just before the page closed still gets its answer.
-      for (final c in claims.where((c) => c.fromMe && c.isPending)) {
-        _queueDecision(c);
-      }
+      _resumePendingClaims();
     } catch (e) {
       debugPrint('FindIt: could not load saved data, starting fresh. $e');
+    }
+  }
+
+  /// Pull to refresh: re-reads saved data, picking up changes made in another
+  /// tab or window. Does nothing in tests, where nothing was loaded.
+  Future<void> refresh() async {
+    final prefs = _prefs;
+    if (prefs == null) return;
+    try {
+      await _lastSave; // Don't read back a half-finished save.
+      await prefs.reload();
+      final raw = prefs.getString(_storageKey);
+      if (raw != null) {
+        _fromJson(jsonDecode(raw) as Map<String, dynamic>);
+        _resumePendingClaims();
+      }
+    } catch (e) {
+      debugPrint('FindIt: could not refresh. $e');
+    }
+    super.notifyListeners(); // Redraw without saving what was just read.
+  }
+
+  /// A claim sent just before the page closed (or in another tab) still gets its answer.
+  void _resumePendingClaims() {
+    for (final c in claims.where((c) => c.fromMe && c.isPending)) {
+      _queueDecision(c);
     }
   }
 

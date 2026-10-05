@@ -58,35 +58,46 @@ class _HomeScreenState extends State<HomeScreen> {
             ];
             final filtering = _query.isNotEmpty || _category != null || _filters.activeCount > 0;
 
-            return ListView(padding: const EdgeInsets.all(12), children: [
-              Text('SEARCH ITEMS...', style: AppTextStyles.label),
-              const SizedBox(height: 6),
-              TextField(
-                onChanged: (v) => setState(() => _query = v),
-                decoration: const InputDecoration(hintText: 'e.g. Blue Backpack, Keys...', prefixIcon: Icon(Icons.search, size: 18)),
+            return RefreshIndicator(
+              onRefresh: store.refresh,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(), // So a short list can still be pulled.
+                padding: const EdgeInsets.all(12),
+                children: [
+                  Text('SEARCH ITEMS...', style: AppTextStyles.label),
+                  const SizedBox(height: 6),
+                  TextField(
+                    onChanged: (v) => setState(() => _query = v),
+                    decoration: const InputDecoration(hintText: 'e.g. Blue Backpack, Keys...', prefixIcon: Icon(Icons.search, size: 18)),
+                  ),
+                  const SizedBox(height: 10),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(children: [
+                      _categoryChip('All', null),
+                      for (final c in Item.categories) _categoryChip(Item.categoryLabel(c), c),
+                    ]),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(children: [
+                    const Expanded(child: Text('Lost & Found Items', style: AppTextStyles.sectionTitle)),
+                    FilterButton(value: _filters, locations: locations, onChanged: (v) => setState(() => _filters = v)),
+                  ]),
+                  const SizedBox(height: 4),
+                  Text('${items.length} item${items.length == 1 ? '' : 's'}', style: AppTextStyles.caption),
+                  const SizedBox(height: 10),
+                  if (items.isEmpty)
+                    EmptyState(filtering ? 'No items match your search or filters.' : 'No items reported yet.', icon: Icons.search_off)
+                  else
+                    for (final (i, item) in items.indexed)
+                      FadeSlideIn(
+                        key: ValueKey(item.id),
+                        index: i,
+                        child: ItemCard(item, onDetails: () => pushPage(context, ItemDetailsScreen(itemId: item.id))),
+                      ),
+                ],
               ),
-              const SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(children: [
-                  _categoryChip('All', null),
-                  for (final c in Item.categories) _categoryChip(Item.categoryLabel(c), c),
-                ]),
-              ),
-              const SizedBox(height: 12),
-              Row(children: [
-                const Expanded(child: Text('Lost & Found Items', style: AppTextStyles.sectionTitle)),
-                FilterButton(value: _filters, locations: locations, onChanged: (v) => setState(() => _filters = v)),
-              ]),
-              const SizedBox(height: 4),
-              Text('${items.length} item${items.length == 1 ? '' : 's'}', style: AppTextStyles.caption),
-              const SizedBox(height: 10),
-              if (items.isEmpty)
-                EmptyState(filtering ? 'No items match your search or filters.' : 'No items reported yet.', icon: Icons.search_off)
-              else
-                for (final item in items)
-                  ItemCard(item, onDetails: () => pushPage(context, ItemDetailsScreen(itemId: item.id))),
-            ]);
+            );
           },
         ),
       );

@@ -23,19 +23,24 @@ class ItemPhoto extends StatelessWidget {
         height: height,
         width: double.infinity,
         decoration: BoxDecoration(color: AppColors.photoBg, border: Border.all(color: AppColors.line)),
-        child: Image(image: photo, fit: BoxFit.cover, gaplessPlayback: true),
+        child: Image(image: photo, fit: BoxFit.cover, gaplessPlayback: true, semanticLabel: 'Photo of ${item.name}'),
       );
       if (!zoomable) return image;
-      return GestureDetector(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PhotoViewer(item))),
-        child: Stack(children: [
-          image,
-          const Positioned(
-            right: 8,
-            bottom: 8,
-            child: CircleAvatar(radius: 14, backgroundColor: Colors.black54, child: Icon(Icons.zoom_in, size: 16, color: Colors.white)),
-          ),
-        ]),
+      return Semantics(
+        button: true,
+        label: 'Photo of ${item.name}. Open full screen',
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PhotoViewer(item))),
+          child: Stack(children: [
+            image,
+            const Positioned(
+              right: 8,
+              bottom: 8,
+              child: CircleAvatar(radius: 14, backgroundColor: Colors.black54, child: Icon(Icons.zoom_in, size: 16, color: Colors.white)),
+            ),
+          ]),
+        ),
       );
     }
 

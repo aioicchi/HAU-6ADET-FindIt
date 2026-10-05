@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'core/theme/app_colors.dart';
@@ -62,6 +63,9 @@ class _FindItAppState extends State<FindItApp> with WidgetsBindingObserver {
         theme: AppTheme.current,
         // Switch instantly so the theme and AppColors never disagree mid-animation.
         themeAnimationDuration: Duration.zero,
+        // Let a mouse drag lists like a finger, so the phone-framed site on a
+        // laptop scrolls and pulls to refresh the same way a phone does.
+        scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: PointerDeviceKind.values.toSet()),
         builder: (context, child) => PhoneFrame(child: child!),
         home: const SplashScreen(),
       );

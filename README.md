@@ -38,6 +38,8 @@ Screenshots are rendered from the app itself with the demo data:
 - **Automatic matching:** when you report an item, FindIt looks for reports on the other side (lost vs found) with the same category or a similar name, notifies you, and lists them under "Possible matches".
 - **Manage your own reports** in My Items: edit, mark as resolved, reopen, delete, and see how many people asked about each one.
 - **Notifications** for possible matches and new replies, plus a profile you can edit.
+- **Pull to refresh** on Browse and My Items (with a mouse on a laptop too), and small fade/slide animations that switch off when the device asks for reduced motion.
+- **Accessible:** every button has a screen-reader label that says what it does ("View details for Umbrella"), tap targets are at least 48×48, and text meets WCAG contrast in both day and night mode. `test/accessibility_test.dart` checks this on eight screens in both modes.
 - **Night mode:** tap the moon on the Home screen, or pick System / Light / Dark under Profile > Appearance. The choice is remembered.
 
 ## Built with
