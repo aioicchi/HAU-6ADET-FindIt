@@ -34,6 +34,7 @@ Screenshots are rendered from the app itself with the demo data:
 - **Report an item** with a name, category, description, date, a photo taken with the camera or picked from the gallery, and where it was: a campus building picked from a list (or "Other…") plus an optional room or exact spot.
 - **View item details**, with a full-screen photo you can zoom and, for found items, where to claim it. Then **message the owner or finder** to arrange a return. Contact details stay private.
 - **Claim a found item:** answer the finder's verification question (e.g. "What name is printed on the card?"). The finder approves or rejects, and an approved claim tells you where to pick it up. Finders review claims on their own reports, and approving one marks the item resolved.
+- **Share a report** to a class or org group chat: the Share button builds a ready-to-paste message (what, where, when, and a link that opens that report on FindIt), using the phone's share sheet or Copy. Contact info is never included.
 - **Automatic matching:** when you report an item, FindIt looks for reports on the other side (lost vs found) with the same category or a similar name, notifies you, and lists them under "Possible matches".
 - **Manage your own reports** in My Items: edit, mark as resolved, reopen, delete, and see how many people asked about each one.
 - **Notifications** for possible matches and new replies, plus a profile you can edit.

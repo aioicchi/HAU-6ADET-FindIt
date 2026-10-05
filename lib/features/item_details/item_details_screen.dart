@@ -10,6 +10,7 @@ import 'package:findit/features/report/report_item_screen.dart';
 import 'package:findit/shared/shared.dart';
 
 import 'widgets/owner_actions.dart';
+import 'widgets/share_sheet.dart';
 import 'widgets/visitor_actions.dart';
 
 class ItemDetailsScreen extends StatelessWidget {
@@ -34,6 +35,12 @@ class ItemDetailsScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Item Details'),
               actions: [
+                if (!item.resolved)
+                  IconButton(
+                    tooltip: 'Share',
+                    icon: const Icon(Icons.share_outlined),
+                    onPressed: () => showShareSheet(context, item),
+                  ),
                 if (isMine)
                   IconButton(
                     tooltip: 'Edit',
