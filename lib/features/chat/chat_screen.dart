@@ -22,6 +22,7 @@ class ChatScreen extends StatelessWidget {
             return Scaffold(appBar: AppBar(), body: const EmptyState('This item is no longer available.'));
           }
           final messages = store.thread(item.id);
+          final isMine = item.ownerId == store.user?.id;
 
           return Scaffold(
             appBar: AppBar(title: Text(item.name)),
@@ -31,7 +32,10 @@ class ChatScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 color: AppColors.banner,
                 child: Text(
-                  'Contact: ${item.contact}\nDescribe identifying details to verify ownership.',
+                  // Contact info stays private, as promised on the report form.
+                  isMine
+                      ? 'Ask for identifying details before handing the item over. Your contact info stays hidden.'
+                      : "The reporter's contact info is private. Describe identifying details to verify ownership.",
                   style: const TextStyle(fontSize: 11, color: AppColors.muted),
                 ),
               ),

@@ -30,6 +30,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
   late final _location = TextEditingController(text: widget.editing?.location);
   late final _contact = TextEditingController(text: widget.editing?.contact ?? store.user?.email);
   late ItemStatus? _status = widget.editing?.status;
+  late String? _category = widget.editing?.tags.where(Item.categories.contains).firstOrNull;
   late DateTime _date = widget.editing?.date ?? DateTime.now();
   late bool _hasPhoto = widget.editing?.hasPhoto ?? false;
   late Uint8List? _photo = widget.editing?.photo;
@@ -112,12 +113,17 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     }
   }
 
+  /// The picked category first, then any extra tags the item already had.
+  List<String> _tags(List<String> existing) =>
+      [_category!, ...existing.where((t) => !Item.categories.contains(t))];
+
   void _submit() {
     if (!_form.currentState!.validate()) return;
     final editing = widget.editing;
 
     if (editing != null) {
       editing
+        ..tags = _tags(editing.tags)
         ..name = _name.text.trim()
         ..description = _description.text.trim()
         ..location = _location.text.trim()
@@ -142,6 +148,7 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
       date: _date,
       contact: _contact.text.trim(),
       ownerId: store.user!.id,
+      tags: _tags(const []),
       hasPhoto: _hasPhoto,
       photo: _photo,
     ));
@@ -157,8 +164,10 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
     _location.clear();
     setState(() {
       _status = null;
+      _category = null;
       _hasPhoto = false;
       _photo = null;
+      _photoAsset = null;
       _date = DateTime.now();
     });
   }
@@ -178,6 +187,17 @@ class _ReportItemScreenState extends State<ReportItemScreen> {
             const Divider(height: 24),
             const FieldLabel('Item name'),
             TextFormField(controller: _name, decoration: const InputDecoration(hintText: 'Enter short title...'), validator: Validators.required),
+            const FieldLabel('Category'),
+            DropdownButtonFormField<String>(
+              initialValue: _category,
+              hint: const Text('Select Category', style: TextStyle(fontSize: 13)),
+              items: [
+                for (final c in Item.categories)
+                  DropdownMenuItem(value: c, child: Text(c[0] + c.substring(1).toLowerCase())),
+              ],
+              onChanged: (v) => setState(() => _category = v),
+              validator: (v) => v == null ? 'Select a category' : null,
+            ),
             const FieldLabel('Description'),
             TextFormField(controller: _description, maxLines: 4, decoration: const InputDecoration(hintText: 'Detail color, material, distinguishing marks...')),
             const FieldLabel('Status'),

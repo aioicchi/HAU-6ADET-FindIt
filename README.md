@@ -1,19 +1,12 @@
-<!--
-  This is your project's front page. Replace every placeholder below.
-  It is the first thing your instructor and any future employer will read, and
-  the live link in it is how your project gets opened for grading.
+# FindIt
 
-  New here? Read START-HERE.md first. Delete this comment when you are done.
--->
+> A campus lost-and-found app for Holy Angel University students: report what you lost or found, browse what others reported, and message the finder or owner to get it back.
 
-# App Name
-
-> One sentence: what this app does, and who it is for.
-
-**Live demo:** https://YOURUSERNAME.github.io/YOUR-REPO/ <!-- GitHub Pages is set up already; replace if you host elsewhere -->
+**Live demo:** https://aioicchi.github.io/HAU-6ADET-FindIt/
+**Demo login:** `student@hau.edu.ph` / `password` (or register a new account)
 **Demo video:** `docs/demo.mp4` (link it here once it exists)
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
-**Author:** Your Name
+**Author:** [aioicchi](https://github.com/aioicchi)
 
 This repository lives in the author's own GitHub account and is public on
 purpose. There is no `student.json` here and there should not be one: see
@@ -24,65 +17,54 @@ personal data.
 
 ## Screenshots
 
-Put two or three real screenshots at phone size in `docs/assets/`, then replace
-this paragraph with them:
-
-```markdown
-| Home | Detail | Add |
+<!-- TODO: add 2-3 phone-size screenshots to docs/assets/ and uncomment the table.
+| Home | Item details | Report item |
 | --- | --- | --- |
-| ![Home](docs/assets/screen-home.png) | ![Detail](docs/assets/screen-detail.png) | ![Add](docs/assets/screen-add.png) |
-```
+| ![Home](docs/assets/screen-home.png) | ![Detail](docs/assets/screen-detail.png) | ![Report](docs/assets/screen-add.png) |
+-->
 
-A repo without screenshots reads as abandoned, whatever the code says.
+_Screenshots coming soon._
 
 ## What it does
 
-Three to five bullets. What can a user actually do?
-
-- ...
-- ...
-- ...
+- **Browse and search** every open lost and found report on campus, and filter by Lost or Found.
+- **Report an item** with a name, category, description, location, date and a photo taken with the camera or picked from the gallery.
+- **View item details**, with a full-screen photo you can zoom, then **message the owner or finder** to arrange a return. Contact details stay private.
+- **Manage your own reports** in My Items: edit, mark as resolved, reopen, delete, and see how many inquiries each one got.
+- **Notifications** for possible matches and new inquiries, plus a profile you can edit.
 
 ## Built with
 
 | | |
 | --- | --- |
 | Framework | Flutter (Dart) |
-| State | `setState` / provider / riverpod (say which) |
-| Storage | shared_preferences / Hive / Drift / Firebase / Supabase / other |
-| Other packages | list the ones that matter, with a word on why |
+| State | One `ChangeNotifier` store (`lib/data/app_store.dart`) read with `ListenableBuilder` |
+| Storage | In memory only, seeded with demo data from `lib/data/mock_data.dart` (see Status) |
+| Other packages | `image_picker` for camera and gallery photos |
 
 ## Running it yourself
 
 ```bash
 flutter pub get
-cp .env.example .env      # only if your app needs keys, see below
-flutter run -d web-server --web-port 8080
+flutter run -d chrome
 ```
 
-Then open http://localhost:8080. Requires Flutter (run `flutter --version` and
-put yours here).
+Or serve it for any browser with `flutter run -d web-server --web-port 8080`
+and open http://localhost:8080. Built with Flutter 3.47.5.
 
-### Environment variables
+On Windows, turn on **Developer Mode** first (`start ms-settings:developers`),
+because Flutter needs it to build apps that use plugins such as `image_picker`.
 
-This project reads its configuration from a `.env` file that is **not** in the
-repository. Copy `.env.example`, fill in your own values, and never commit the
-result.
-
-| Variable | What it is | Where to get one |
-| --- | --- | --- |
-| `EXAMPLE_API_KEY` | ... | ... |
+This app needs no API keys, so there is no `.env` to set up.
 
 ## Privacy and secrets
 
-Required section. Two or three honest sentences:
-
-- What personal data this app stores, if any, and where it goes.
-- Where the secrets live (`.env` locally, repository secrets in the deploy
-  workflow) and what protects the data on the service side (Firestore rules,
-  Supabase RLS, or "nothing leaves the device").
-- Confirm that all sample data, screenshots and the video contain **no real
-  personal information**.
+- FindIt has no backend: accounts, reports, photos and messages stay in the
+  browser's memory and are gone when the page reloads. Nothing is sent to a server.
+- There are no secrets or API keys in this project.
+- All sample data is fictional (demo user "Juan Dela Cruz", made-up IDs and
+  phone numbers), and the one real-looking face in the sample photos is pixelated.
+  A reporter's contact info is never shown to other users in the app.
 
 ## Project documentation
 
@@ -93,38 +75,38 @@ Required section. Two or three honest sentences:
 | [Design system](docs/03-design-system.md) | colors, type, spacing, components |
 | [Weekly reports](docs/04-weekly-reports.md) | what happened each week |
 | [Demo video](docs/05-demo-video.md) | the recording and what it shows |
-| [Start here](START-HERE.md) | how this repo works (delete once you have read it) |
 | [Security and privacy](docs/06-security-and-privacy.md) | the checklist, filled in |
 
 ## Status and what is next
 
-Be honest. What works, what is half done, what you would build next. An honest
-"known issues" section reads better than a claim the reader disproves in thirty
-seconds.
+**Works:** login and register, browse/search/filter, report and edit items with
+photos and categories, item details with a zoomable photo, chat, My Items
+(resolve, reopen, delete), notifications, edit profile.
+
+**Known issues:**
+- Data is not saved: everything resets when the page reloads.
+- Chat is one-way; no one replies yet, and every message counts as a new inquiry.
+- "Forgot password" only shows a confirmation; no email is sent.
+- The "possible match" notification is part of the demo data, not computed.
+
+**Next:** save data with Firebase or Supabase, a "claim this item" flow where the
+finder verifies the claimer, automatic matching between lost and found reports,
+and filters by category and location.
 
 ## Credits
 
 - Packages: see `pubspec.yaml`
-- Assets, icons, 3D models, sounds: name the author and the licence for each
-- People who helped, and how
+- Sample item photos in `assets/images/` were taken from the web for demo
+  purposes only (Aquaflask product photo, sample ID card designs, umbrella and
+  key photos). <!-- TODO: add the source link for each photo -->
 
 ## AI use
 
-If you used AI while building this, say so here. Honest disclosure is the
-standard in this course and increasingly outside it, and reporting heavy use
-accurately costs you nothing.
-
-This section is the last 10 points of the finals badge, and it wants three
-things:
-
 ![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)
 
-- the badge above, or one you like better
-- a line naming which assistant you used and how much of the work it touched
-- a link to [AI-USAGE.md](AI-USAGE.md), where the full account lives
-
-Keep the detail in `AI-USAGE.md` rather than here. This section is the summary a
-visitor reads; that file is the record the badge is graded from.
+<!-- TODO: in your own words, say how much of the work Claude touched. -->
+I used Claude (Claude Code) while building this app. The full account of what it
+did, where it was wrong, and which parts I wrote myself is in [AI-USAGE.md](AI-USAGE.md).
 
 ## Licence
 

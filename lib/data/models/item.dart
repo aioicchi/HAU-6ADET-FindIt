@@ -7,6 +7,9 @@ import 'package:findit/core/theme/app_colors.dart';
 enum ItemStatus { lost, found }
 
 class Item {
+  /// Choices for the report form. The picked one is stored as the item's first tag.
+  static const categories = ['ID CARD', 'KEYS', 'BAG', 'WALLET', 'ELECTRONICS', 'TUMBLER', 'UMBRELLA', 'CLOTHING', 'OTHER'];
+
   Item({
     required this.id,
     required this.name,
@@ -68,6 +71,9 @@ class Item {
     if (n.contains('bag') || n.contains('backpack')) return Icons.backpack_outlined;
     if (n.contains('phone') || n.contains('charger')) return Icons.smartphone_outlined;
     if (n.contains('tumbler') || n.contains('bottle') || n.contains('flask')) return Icons.local_drink_outlined;
+    if (n.contains('wallet')) return Icons.account_balance_wallet_outlined;
+    if (n.contains('clothing') || n.contains('jacket')) return Icons.checkroom_outlined;
+    if (n.contains('electronics') || n.contains('laptop')) return Icons.devices_outlined;
     return Icons.inventory_2_outlined;
   }
 }

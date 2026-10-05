@@ -9,10 +9,11 @@ class MockData {
 
   static AppUser demoUser() => AppUser(
         id: 'u1',
-        name: 'Hayward Flor',
+        // Obviously fake details: this repo is public.
+        name: 'Juan Dela Cruz',
         email: demoEmail,
-        studentId: '2023-00123',
-        phone: '0917 123 4567',
+        studentId: '0000-00000',
+        phone: '0900 000 0000',
       );
 
   static List<Item> items() {
