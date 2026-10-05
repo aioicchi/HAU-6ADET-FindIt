@@ -50,13 +50,15 @@ class MockData {
       Item(
         id: '3',
         name: 'Student ID',
-        description: "Found a Holy Angel University student ID card near the cafeteria. Name on the card is Hayward Flor. It's in a clear plastic holder with a red lanyard.",
+        description: 'Found an ID card left on a bookshelf in the library. White card with a photo and barcode. Name on the card is Wes Lee Coyote.',
         status: ItemStatus.found,
         location: 'University Library',
         date: DateTime(2026, 1, 30),
         contact: 'library@hau.edu.ph',
         ownerId: 'u2',
         tags: ['ID CARD', 'DOCUMENTS'],
+        hasPhoto: true,
+        photoAsset: 'assets/images/student_id_found.jpg',
       ),
       Item(
         id: '4',
