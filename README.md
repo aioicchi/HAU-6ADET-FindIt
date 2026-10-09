@@ -3,9 +3,13 @@
 > A campus lost-and-found app for Holy Angel University students: report what you lost or found, browse what others reported, and message the finder or owner to get it back.
 
 **Live demo:** https://aioicchi.github.io/HAU-6ADET-FindIt/
+
 **Demo login:** `student@hau.edu.ph` / `password` (or register a new account)
+
 **Demo video:** `docs/demo.mp4` (link it here once it exists)
+
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
+
 **Author:** [aioicchi](https://github.com/aioicchi)
 
 ---
