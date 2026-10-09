@@ -125,4 +125,4 @@ did, where it was wrong, and which parts I wrote myself is in [AI-USAGE.md](AI-U
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). Change it if you want different terms.
+Non-Commercial, see [LICENSE](LICENSE).
