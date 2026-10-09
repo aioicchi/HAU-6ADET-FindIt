@@ -8,11 +8,6 @@
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
 **Author:** [aioicchi](https://github.com/aioicchi)
 
-This repository lives in the author's own GitHub account and is public on
-purpose. There is no `student.json` here and there should not be one: see
-`docs/06-security-and-privacy.md` for what a public repo means for secrets and
-personal data.
-
 ---
 
 ## Screenshots
