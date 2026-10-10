@@ -1,14 +1,12 @@
 # Mockup and wireframes
 
-The visual plan for this app. Your wireframes answered what goes where; the
-mockup shows what it looks like.
-
 ## Mockup
 
-Put your mockup images or PDF in `assets/` and embed them here, one heading per
-screen.
-
-_(Embed your mockup here once it is in `assets/`.)_
+<p align="center">
+  <img src="assets/screenshots/opening_screen.png" alt="Splash screen" width="250">
+  <img src="assets/screenshots/report_item_screen.png" alt="Report item screen, day mode" width="250">
+  <img src="assets/screenshots/my_items_screen.png" alt="My Items screen, night mode" width="250">
+</p>
 
 ## Wireframes
 
