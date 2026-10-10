@@ -2,10 +2,10 @@
 
 ## Mockup
 
-<p align="center">
-  <img src="assets/screenshots/opening_screen.png" alt="Splash screen" width="250">
-  <img src="assets/screenshots/report_item_screen.png" alt="Report item screen, day mode" width="250">
-  <img src="assets/screenshots/my_items_screen.png" alt="My Items screen, night mode" width="250">
+<p align="center"> 
+  <img src="./assets/images/opening_screen.png" alt="Opening screen" width="250">
+  <img src="./assets/images/report_item_screen.png" alt="Report item screen" width="250">
+  <img src="./assets/images/my_items_screen.png" alt="My Items screen" width="250">
 </p>
 
 ## Wireframes
