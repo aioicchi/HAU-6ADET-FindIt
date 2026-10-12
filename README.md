@@ -124,7 +124,7 @@ claims and real-time chat between users.
 ![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)
 
 <!-- TODO: in your own words, say how much of the work Claude touched. -->
-I used Claude (Claude Code) while building this app. The full account of what it
+I used ChatGPT (Open AI) and Claude (Claude Code) while building this app. The full account of what it
 did, where it was wrong, and which parts I wrote myself is in [AI-USAGE.md](AI-USAGE.md).
 
 ## Licence
