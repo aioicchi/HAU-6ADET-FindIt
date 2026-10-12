@@ -71,6 +71,4 @@ One row per reusable widget: what it is, which file it lives in, what parameters
 
 ## Changes since the last version
 
-Newest at the top.
-
 - 2026-10-05: Added night mode: the same colour names, flipped (`AppColors.dark`, set through `ThemeController`).
